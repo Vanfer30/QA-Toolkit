@@ -1,54 +1,55 @@
 #!/bin/bash
-
 COVERAGE_FILE=$1
+THRESHOLD=80
 
 if [ ! -f "$COVERAGE_FILE" ]; then
   echo "❌ Error: File not found - $COVERAGE_FILE"
   exit 1
 fi
 
-# ✅ Top-level summary
+# Generate top-level summary, ignoring 'branchesTrue'
 SUMMARY=$(jq -r '
   .total 
   | to_entries[] 
-  | select(.value.pct != null) 
+  | select(.key != "branchesTrue" and .value.pct != null) 
   | "\(.key | ascii_upcase): \(.value.pct)% covered"
 ' "$COVERAGE_FILE")
 
-# ✅ Metrics under threshold
-LOW_COVERAGE=$(jq -r '
+# Detect low coverage items below threshold (excluding 'branchesTrue')
+LOW_COVERAGE=$(jq -r --argjson threshold "$THRESHOLD" '
   .total 
   | to_entries[] 
-  | select(.value.pct != null and .value.pct < 80) 
+  | select(.key != "branchesTrue" and .value.pct < $threshold) 
   | "\(.key | ascii_upcase) is below threshold at \(.value.pct)%"
 ' "$COVERAGE_FILE")
 
-# ✅ 3 files with lowest line coverage (exclude total, require lines.pct)
+# Top 3 files with lowest line coverage
 WORST_FILES=$(jq -r '
-  to_entries
-  | map(select(.key != "total" and .value.lines.pct != null))
-  | sort_by(.value.lines.pct)
-  | .[:3]
-  | map("\(.key): \(.value.lines.pct)% line coverage")
+  to_entries 
+  | map(select(.key != "total")) 
+  | sort_by(.value.lines.pct) 
+  | .[:3] 
+  | map("\(.key): \(.value.lines.pct)% line coverage") 
   | .[]
 ' "$COVERAGE_FILE")
 
-# ✅ Build final report
+# Build final markdown message
 PROMPT="📊 **Test Coverage Summary**\n\n$SUMMARY"
 
 if [ -n "$LOW_COVERAGE" ]; then
-  PROMPT+="\n\n⚠️ **Areas Below Target Coverage (80%)**\n$LOW_COVERAGE"
+  PROMPT+="\n\n⚠️ **Areas Below Target Coverage ($THRESHOLD%)**\n$LOW_COVERAGE"
 fi
 
 if [ -n "$WORST_FILES" ]; then
   PROMPT+="\n\n📉 **Files with Lowest Line Coverage**\n$WORST_FILES"
 fi
 
-PROMPT+="\n\n💡 _Please suggest areas that may require additional unit or integration tests._"
+PROMPT+="\n\n💡 _Please review these metrics and consider adding additional unit or integration tests where coverage is lacking._"
 
-# ✅ Output to terminal and markdown file
-echo -e "::group::AI Coverage Summary"
+# Output for GitHub Actions UI
+echo "::group::AI Coverage Summary"
 echo -e "$PROMPT"
-echo -e "::endgroup::"
+echo "::endgroup::"
 
+# Output to markdown file for PR comment
 echo -e "$PROMPT" > .gpt-comment.md
