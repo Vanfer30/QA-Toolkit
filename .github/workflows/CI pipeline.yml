@@ -49,6 +49,9 @@ jobs:
         with:
           name: coverage-summary
           path: coverage/
+          
+      - name: Print JSON coverage file
+        run: cat coverage/coverage-summary.json
 
       - name: Show downloaded coverage file
         run: ls -la coverage/
