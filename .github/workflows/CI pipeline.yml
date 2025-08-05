@@ -3,17 +3,70 @@ name: AI QA Coverage Bot
 on:
   pull_request:
     paths:
-      #- '**/*.spec.js'
+     # - '**/*.ts'
+      #- '**/*.js'
       #- '**/coverage-summary.json'
 
 jobs:
-  ai-coverage-audit:
+  test-unit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install jq & run audit
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Jest tests and generate coverage
+        run: npm run test:unit -- --coverage
+
+      - name: Show generated coverage files
+        run: ls -la coverage/
+
+      - name: Upload coverage report as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-summary
+          path: coverage/coverage-summary.json
+
+  ai-coverage-audit:
+    needs: test-unit
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-summary
+          path: coverage
+
+      - name: Show downloaded coverage file
+        run: ls -la coverage/
+
+      - name: Install jq
+        run: sudo apt-get install jq -y
+
+      - name: Run AI coverage analysis
         run: |
-          sudo apt-get install jq -y
           chmod +x scripts/*.sh
-          export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
           ./scripts/github-coverage-bot.sh coverage/coverage-summary.json
+
+      - name: Install GitHub CLI
+        run: sudo apt-get install gh -y
+
+      - name: Post GPT report as PR comment
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_URL="https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
+          echo "Commenting on $PR_URL"
+          gh pr comment "$PR_URL" --body-file .gpt-comment.md || echo "Comment failed"
