@@ -19,3 +19,7 @@ curl https://api.openai.com/v1/chat/completions \
     "messages": [{"role": "user", "content": "'"$FULL_PROMPT"'"}],
     "temperature": 0.3
   }' | jq -r '.choices[0].message.content'
+
+
+
+  

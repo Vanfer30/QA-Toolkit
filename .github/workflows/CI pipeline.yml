@@ -6,7 +6,7 @@ on:
       # Uncomment if you want to limit trigger
       # - '**/*.ts'
       # - '**/*.js'
-      # - 'coverage/coverage-final.json'
+      # - 'coverage/coverage-summary.json'
 
 jobs:
   test-unit:
@@ -59,7 +59,7 @@ jobs:
       - name: Run AI coverage analysis
         run: |
           chmod +x scripts/*.sh
-          ./scripts/github-coverage-bot.sh coverage/coverage-final.json
+          ./scripts/github-coverage-bot.sh coverage/coverage-summary.json
 
       - name: Install GitHub CLI
         run: sudo apt-get install gh -y
