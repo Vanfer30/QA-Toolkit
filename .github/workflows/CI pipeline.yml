@@ -67,14 +67,15 @@ jobs:
       - name: Install GitHub CLI
         run: sudo apt-get install gh -y
 
-      - name: Post GPT report as PR comment (via REST API)
+      - name: Post GPT report as PR comment (with PAT)
         if: always()
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.AI_COVERAGE_BOT_TOKEN }}
         run: |
-          echo "Posting PR comment via gh api..."
-          gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
+        echo "Posting PR comment via gh api..."
+        gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
           -f body="$(cat .gpt-comment.md)" || echo "Comment failed"
+
 
 
  
