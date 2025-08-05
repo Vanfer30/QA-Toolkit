@@ -14,3 +14,4 @@ echo "::group::AI Coverage Summary"
 echo "$OUTPUT"
 echo "::endgroup::"
 
+echo "$OUTPUT" > .gpt-comment.md  # ✅ Save the output

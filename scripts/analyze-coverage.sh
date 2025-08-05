@@ -9,8 +9,10 @@ fi
 # Top-level summary
 SUMMARY=$(jq -r '
   .total | 
-  to_entries[] | 
-  "\(.key | ascii_upcase): \(.value.pct)% covered"
+  .to_entries[] 
+  | select(.value.pct != null) 
+  | "\(.key | ascii_upcase): \(.value.pct)% covered"
+
 ' "$COVERAGE_FILE")
 
 # Under-threshold metrics (e.g. branches under 80%)
