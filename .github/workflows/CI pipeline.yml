@@ -2,7 +2,7 @@ name: AI QA Coverage Bot
 
 on:
   pull_request:
-    paths:
+   # paths:
      # - '**/*.ts'
       #- '**/*.js'
       #- '**/coverage-summary.json'
@@ -45,7 +45,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: coverage-summary
-          path: coverage
+          path: coverage/
 
       - name: Show downloaded coverage file
         run: ls -la coverage/
