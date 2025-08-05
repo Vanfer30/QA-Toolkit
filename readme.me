@@ -1,0 +1,76 @@
+A QA Toolset Repo
+This repo makes use of cypress E2E and component testing
+This repo makes use of Jest unit testing
+This repo makes use of API Testing using cypress
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 🤖 AI QA GitHub Template
+
+Automatically posts GPT-powered test coverage and flaky log summaries to pull requests.
+
+## Features
+- Analyzes test coverage (`coverage-summary.json`)
+- Summarizes flaky test logs (`logs/test-failures.txt`)
+- Posts Markdown-formatted comment to PR
+- Optional Slack notifications (via webhook)
+
+## Setup
+1. Add these secrets to your repo:
+   - `OPENAI_API_KEY`
+   - *(optional)* `SLACK_WEBHOOK_URL`
+2. Push your test output files:
+   - `coverage/coverage-summary.json`
+   - `logs/test-failures.txt`
+
+## Template Usage
+Click **Use this template** on GitHub to copy this repo and drop it into any project.
+
+
+## Template Usage
+To implement in an already existing project with cypress tests
+1. From this repo, copy:
+   - .github/workflows/ai-qa.yml
+   - scripts/
+   - prompts/
+
+2. Add OPENAI_API_KEY and optional SLACK_WEBHOOK_URL
+   - `OPENAI_API_KEY`
+   - *(optional)* `SLACK_WEBHOOK_URL`
+
+3. Make sure your existing Cypress test step generates:
+   - coverage/coverage-summary.json
+
+4. To enable flaky log analysis:
+   - Modify your cypress run step to capture test logs:
+   - npx cypress run || tee logs/test-failures.txt
+
+5. AI PR Bot will now auto-trigger on PRs
+   - When someone opens or updates a pull request that:
+   - Modifies a .spec.js file
+   - Or updates coverage-summary.json
+   - It will:
+
+      ✅ Analyze code coverage
+
+      ✅ (If failure) analyze test logs
+
+      ✅ Comment on the PR with GPT findings
+
+      ✅ Optionally send the summary to Slack
