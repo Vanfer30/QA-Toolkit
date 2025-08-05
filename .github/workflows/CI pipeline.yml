@@ -23,7 +23,6 @@ jobs:
 
       - name: Run Jest tests and generate coverage
         run: npm run test:unit -- --coverage
-
       - name: Show generated coverage files
         run: ls -la coverage/
 
