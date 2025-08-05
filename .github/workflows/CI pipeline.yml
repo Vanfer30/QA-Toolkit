@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-summary
-          path: coverage/coverage-final.json
+          path: coverage/coverage-summary.json
 
   ai-coverage-audit:
     needs: test-unit

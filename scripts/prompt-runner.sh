@@ -1,6 +1,6 @@
 #!/bin/bash
 PROMPT_FILE=$1
-INPUT_DATA=$2
+INPUT_DATA=$(cat "$2")
 
 if [[ -z "$OPENAI_API_KEY" ]]; then
   echo "Set your OPENAI_API_KEY environment variable first."
