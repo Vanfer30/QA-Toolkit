@@ -4,9 +4,9 @@ on:
   pull_request:
     paths:
       # Uncomment if you want to limit trigger
-      # - '**/*.ts'
-      # - '**/*.js'
-      # - 'coverage/coverage-summary.json'
+       - '**/*.ts'
+       - '**/*.js'
+       - 'coverage/coverage-summary.json'
 
 jobs:
   test-unit:
@@ -49,7 +49,7 @@ jobs:
         with:
           name: coverage-summary
           path: coverage/
-          
+
       - name: Print JSON coverage file
         run: cat coverage/coverage-summary.json
 
@@ -75,3 +75,4 @@ jobs:
           PR_URL="https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
           echo "Commenting on $PR_URL"
           gh pr comment "$PR_URL" --body-file .gpt-comment.md || echo "Comment failed"
+          echo "PR number: ${{ github.event.pull_request.number }}"
