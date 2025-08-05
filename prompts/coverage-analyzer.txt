@@ -1,1 +1,3 @@
-You are an AI code auditor. This is a coverage summary from a web project. Identify the top 3 critical areas with the lowest coverage. Explain why they might be high risk and how we should approach testing them.
+You are an AI code auditor. This is a coverage summary from a web project.
+
+Identify the top 3 critical areas with the lowest coverage. Explain why they might be high risk and how we should approach testing them.

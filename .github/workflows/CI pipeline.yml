@@ -1,0 +1,19 @@
+name: AI QA Coverage Bot
+
+on:
+  pull_request:
+    paths:
+      #- '**/*.spec.js'
+      #- '**/coverage-summary.json'
+
+jobs:
+  ai-coverage-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install jq & run audit
+        run: |
+          sudo apt-get install jq -y
+          chmod +x scripts/*.sh
+          export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+          ./scripts/github-coverage-bot.sh coverage/coverage-summary.json
