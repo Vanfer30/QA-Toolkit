@@ -17,6 +17,11 @@ PROMPT=$(cat "$PROMPT_FILE")
 INPUT_DATA=$(cat "$INPUT_FILE")
 FULL_PROMPT="$PROMPT\n\n$INPUT_DATA"
 
+echo "::group::🛠️ GPT Prompt Debug"
+echo -e "$FULL_PROMPT"
+echo "::endgroup::"
+
+
 # Properly escape the content using jq
 RESPONSE=$(curl https://api.openai.com/v1/chat/completions \
   -s \
@@ -36,6 +41,10 @@ RESPONSE=$(curl https://api.openai.com/v1/chat/completions \
 EOF
 )
 
+echo "::group::🛠️ GPT Raw API Response"
+echo "$RESPONSE" | jq .
+echo "::endgroup::"
+
 COMMENT=$(echo "$RESPONSE" | jq -r '.choices[0].message.content')
 
 # Output PR comment
@@ -43,5 +52,11 @@ echo -e "::group::AI Coverage Summary"
 echo "$COMMENT"
 echo -e "::endgroup::"
 
+if [[ "$COMMENT" == "null" || -z "$COMMENT" ]]; then
+  echo "❌ GPT response was null or empty."
+  exit 1
+fi
+
 # Save for GH PR comment
 echo "$COMMENT" > .gpt-comment.md
+
