@@ -12,33 +12,33 @@ if [[ ! -f "$PROMPT_FILE" ]] || [[ ! -f "$INPUT_FILE" ]]; then
   exit 1
 fi
 
-# Read and combine prompt + input
+# Load and combine prompt + input
 PROMPT=$(cat "$PROMPT_FILE")
-INPUT_DATA=$(cat "$INPUT_FILE")
-FULL_PROMPT="$PROMPT"$'\n\n'"$INPUT_DATA"
+INPUT=$(cat "$INPUT_FILE")
+FULL_PROMPT="$PROMPT"$'\n\n'"$INPUT"
 
-# Show prompt debug
+# Debug full prompt
 echo "::group::🛠️ GPT Prompt Debug"
 echo "$FULL_PROMPT"
 echo "::endgroup::"
 
-# ✅ Build JSON safely
+# Prepare JSON payload safely
 JSON_PAYLOAD=$(jq -n \
   --arg model "gpt-4o" \
-  --arg content "$FULL_PROMPT" \
+  --argjson messages "$(jq -n --arg content "$FULL_PROMPT" '[{ "role": "user", "content": $content }]')" \
   '{
     model: $model,
-    messages: [ { role: "user", content: $content } ],
+    messages: $messages,
     temperature: 0.3
   }'
 )
 
-# 👇 Debug the final JSON payload
+# Debug final JSON payload
 echo "::group::🧪 Final JSON Payload"
 echo "$JSON_PAYLOAD" | jq .
 echo "::endgroup::"
 
-# 🔁 Make API request
+# Call OpenAI API
 RESPONSE=$(curl https://api.openai.com/v1/chat/completions \
   -s \
   -H "Authorization: Bearer $OPENAI_API_KEY" \
@@ -51,17 +51,17 @@ echo "::group::🛠️ GPT Raw API Response"
 echo "$RESPONSE" | jq .
 echo "::endgroup::"
 
-# Extract and print comment
+# Extract markdown content
 COMMENT=$(echo "$RESPONSE" | jq -r '.choices[0].message.content')
 
+# Print comment and save to file
 echo "::group::AI Coverage Summary"
 echo "$COMMENT"
 echo "::endgroup::"
 
-# Save to file
 echo "$COMMENT" > .gpt-comment.md
 
-# Fail if no comment
+# Fail if response was empty
 if [[ "$COMMENT" == "null" || -z "$COMMENT" ]]; then
   echo "❌ GPT response was null or empty."
   exit 1
