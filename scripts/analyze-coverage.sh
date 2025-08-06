@@ -47,9 +47,9 @@ fi
 PROMPT+="\n\n💡 _Please review these metrics and consider adding additional unit or integration tests where coverage is lacking._"
 
 # Output for GitHub Actions UI
-echo "::group::AI Coverage Summary"
-echo -e "$PROMPT"
-echo "::endgroup::"
+#echo "::group::AI Coverage Summary"
+#echo -e "$PROMPT"
+#echo "::endgroup::"
 
 # Output to markdown file for PR comment
-echo -e "$PROMPT" > .gpt-comment.md
+#echo -e "$PROMPT" > .gpt-comment.md
