@@ -57,3 +57,14 @@ To implement in an already existing project with cypress tests
       ✅ Comment on the PR with GPT findings
 
       ✅ Optionally send the summary to Slack
+
+
+
+      GitHub Action (ai-coverage-audit job)
+ └── ./scripts/github-coverage-bot.sh coverage/coverage-summary.json
+       └── calls: analyze-coverage.sh
+              └── calls: prompt-runner.sh prompts/coverage-analyzer.txt coverage-summary.json
+       └── saves GPT response ➝ .gpt-comment.md
+
+ └── gh api repos/:owner/:repo/issues/:pr_number/comments
+       └── posts .gpt-comment.md to the PR
