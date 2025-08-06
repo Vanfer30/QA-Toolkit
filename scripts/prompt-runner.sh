@@ -12,51 +12,48 @@ if [[ ! -f "$PROMPT_FILE" ]] || [[ ! -f "$INPUT_FILE" ]]; then
   exit 1
 fi
 
-# Combine prompt + data
+# Read prompt and input data safely
 PROMPT=$(cat "$PROMPT_FILE")
 INPUT_DATA=$(cat "$INPUT_FILE")
+
 FULL_PROMPT="$PROMPT\n\n$INPUT_DATA"
 
 echo "::group::🛠️ GPT Prompt Debug"
 echo -e "$FULL_PROMPT"
 echo "::endgroup::"
 
+# Build JSON body using jq to ensure correct escaping
+JSON_PAYLOAD=$(jq -n \
+  --arg model "gpt-4o" \
+  --arg content "$FULL_PROMPT" \
+  '{
+    model: $model,
+    messages: [{ role: "user", content: $content }],
+    temperature: 0.3
+  }')
 
-# Properly escape the content using jq
+# Call OpenAI API
 RESPONSE=$(curl https://api.openai.com/v1/chat/completions \
   -s \
   -H "Authorization: Bearer $OPENAI_API_KEY" \
   -H "Content-Type: application/json" \
-  -d @- <<EOF
-{
-  "model": "gpt-4o",
-  "messages": [
-    {
-      "role": "user",
-      "content": $(jq -Rs <<< "$FULL_PROMPT")
-    }
-  ],
-  "temperature": 0.3
-}
-EOF
-)
+  -d "$JSON_PAYLOAD")
 
 echo "::group::🛠️ GPT Raw API Response"
 echo "$RESPONSE" | jq .
 echo "::endgroup::"
 
+# Extract message
 COMMENT=$(echo "$RESPONSE" | jq -r '.choices[0].message.content')
 
-# Output PR comment
-echo -e "::group::AI Coverage Summary"
+echo "::group::AI Coverage Summary"
 echo "$COMMENT"
-echo -e "::endgroup::"
+echo "::endgroup::"
 
+# Write to comment file only if valid
 if [[ "$COMMENT" == "null" || -z "$COMMENT" ]]; then
   echo "❌ GPT response was null or empty."
   exit 1
 fi
 
-# Save for GH PR comment
 echo "$COMMENT" > .gpt-comment.md
-
