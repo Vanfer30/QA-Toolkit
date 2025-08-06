@@ -1,15 +1,11 @@
 name: AI QA Coverage Bot
 
 on:
-  push:
-    branches: [ main, develop ]
   pull_request:
     paths:
       - '**/*.ts'
       - '**/*.js'
       - 'coverage/coverage-summary.json'
-  schedule:
-    - cron: '0 2 * * *' # Nightly at 2am
 
 permissions:
   contents: read
@@ -19,7 +15,6 @@ permissions:
 jobs:
   test-unit:
     runs-on: ubuntu-latest
-    name: 🧪 Unit + Coverage Tests
 
     steps:
       - uses: actions/checkout@v4
@@ -44,10 +39,43 @@ jobs:
           name: coverage-summary
           path: coverage/coverage-summary.json
 
+  test-cypress-e2e:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Cypress E2E tests
+        run: npx cypress run --e2e
+
+  test-cypress-component:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Cypress Component tests
+        run: npx cypress run --component
+
   ai-coverage-audit:
     needs: test-unit
     runs-on: ubuntu-latest
-    name: 🤖 GPT Coverage Auditor
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
@@ -85,41 +113,3 @@ jobs:
           echo "Posting PR comment via gh api..."
           gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
           -f body="$(cat .gpt-comment.md)" || echo "Comment failed"
-
-  cypress-e2e:
-    if: github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
-    name: 🌐 Cypress E2E Tests
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run E2E tests
-        run: npm run test:e2e
-
-  cypress-component:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    name: 🧩 Cypress Component Tests
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run Component tests
-        run: npm run test:component
