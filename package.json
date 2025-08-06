@@ -24,6 +24,8 @@
     "test": "jest --config jest.config.ts",
     "test:unit": "jest --config jest.config.ts --coverage",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "test:e2e": "cypress run --e2e",
+    "test:component": "cypress run --component"
   }
 }
