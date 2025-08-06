@@ -16,17 +16,30 @@ permissions:
 jobs:
   test-unit:
     runs-on: ubuntu-latest
+    outputs:
+      jest_status: ${{ steps.jest.outcome }}
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
+
       - name: Install dependencies
         run: npm ci
+
       - name: Run Jest tests and generate coverage
-        run: npm run test:unit -- --coverage
-      - name: Upload coverage report as artifact
+        id: jest
+        run: npm run test:unit -- --coverage > jest-output.txt || true
+
+      - name: Upload Jest test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jest-report
+          path: jest-output.txt
+
+      - name: Upload coverage summary
         uses: actions/upload-artifact@v4
         with:
           name: coverage-summary
@@ -34,6 +47,9 @@ jobs:
 
   test-cypress:
     runs-on: ubuntu-latest
+    outputs:
+      e2e_status: ${{ steps.e2e.outcome }}
+      comp_status: ${{ steps.comp.outcome }}
     steps:
       - uses: actions/checkout@v4
 
@@ -46,50 +62,69 @@ jobs:
         run: npm ci
 
       - name: Run Cypress E2E tests
+        id: e2e
         run: npx cypress run --e2e > e2e-output.txt || true
 
       - name: Run Cypress Component tests
+        id: comp
         run: npx cypress run --component > component-output.txt || true
 
-      - name: Post Cypress Test Results to PR
-        if: always()
+      - name: Upload Cypress test reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-output
+          path: |
+            e2e-output.txt
+            component-output.txt
+
+  post-results:
+    needs: [test-unit, test-cypress]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all test outputs
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Post combined test results to PR
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
+            const stripAnsi = str => str.replace(/\u001b\[[0-9;]*m/g, '');
 
-            function stripAnsi(str) {
-              return str.replace(/\u001b\[.*?m/g, '');
-            }
-
-            const e2eExists = fs.existsSync('e2e-output.txt');
-            const compExists = fs.existsSync('component-output.txt');
-
-            const e2eRaw = e2eExists ? fs.readFileSync('e2e-output.txt', 'utf8') : '';
-            const compRaw = compExists ? fs.readFileSync('component-output.txt', 'utf8') : '';
-
-            const e2eOutput = e2eExists ? stripAnsi(e2eRaw) : '⚠️ No E2E test output found.';
-            const compOutput = compExists ? stripAnsi(compRaw) : '⚠️ No Component test output found.';
+            const jestOutput = stripAnsi(fs.readFileSync('artifacts/jest-report/jest-output.txt', 'utf8'));
+            const e2eOutput = stripAnsi(fs.readFileSync('artifacts/cypress-output/e2e-output.txt', 'utf8'));
+            const compOutput = stripAnsi(fs.readFileSync('artifacts/cypress-output/component-output.txt', 'utf8'));
 
             const e2ePassed = e2eOutput.includes('All specs passed!');
             const compPassed = compOutput.includes('All specs passed!');
+            const jestPassed = jestOutput.toLowerCase().includes('pass');
 
             const body = [
-              '## 🧪 Cypress Test Results',
+              '## ✅ CI Test Summary',
               '',
-              `### 🔹 E2E Tests ${e2ePassed ? '✅' : '❌'}`,
+              `**Jest Tests:** ${jestPassed ? '✅ Passed' : '❌ Issues Found'}`,
               '```txt',
-              e2eOutput.slice(-2000),
+              jestOutput.slice(-1500),
               '```',
               '',
-              `### 🔸 Component Tests ${compPassed ? '✅' : '❌'}`,
+              `**Cypress E2E:** ${e2ePassed ? '✅ Passed' : '❌ Issues Found'}`,
               '```txt',
-              compOutput.slice(-2000),
+              e2eOutput.slice(-1500),
               '```',
+              '',
+              `**Cypress Component:** ${compPassed ? '✅ Passed' : '❌ Issues Found'}`,
+              '```txt',
+              compOutput.slice(-1500),
+              '```'
             ].join('\n');
 
-            await github.rest.issues.createComment({
+            github.rest.issues.createComment({
               issue_number: context.payload.pull_request.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -103,20 +138,38 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
     steps:
       - uses: actions/checkout@v4
+
       - name: Download coverage report
         uses: actions/download-artifact@v4
         with:
           name: coverage-summary
           path: coverage/
+
       - name: Run AI coverage analysis
         run: |
           chmod +x scripts/*.sh
           ./scripts/github-coverage-bot.sh coverage/coverage-summary.json
-      - name: Post GPT report as PR comment (via REST API)
+
+      - name: Post GPT report as PR comment
         if: always()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "Posting PR comment via gh api..."
-          gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
-          -f body="$(cat .gpt-comment.md)" || echo "Comment failed"
+          gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -f body="$(cat .gpt-comment.md)" \
+            repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments
+
+  notify-slack:
+    needs: [post-results, ai-coverage-audit]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Slack notification
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{
+            "text": "🔔 QA CI Summary for PR #${{ github.event.pull_request.number }}\nJest ✅ ${{ needs.test-unit.result }}\nCypress ✅ ${{ needs.test-cypress.result }}\nAI Coverage Posted ✅"
+          }' $SLACK_WEBHOOK_URL
