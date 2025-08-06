@@ -58,7 +58,49 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
-            const stripAnsi = require('strip-ansi');
+
+            // ✅ Simple ANSI remover
+            function stripAnsi(str) {
+              return str.replace(
+                // eslint-disable-next-line no-control-regex
+                /\u001b\[.*?m/g,
+                ''
+              );
+            }
+
+            const e2eExists = fs.existsSync('e2e-output.txt');
+            const compExists = fs.existsSync('component-output.txt');
+
+            const e2eRaw = e2eExists ? fs.readFileSync('e2e-output.txt', 'utf8') : '';
+            const compRaw = compExists ? fs.readFileSync('component-output.txt', 'utf8') : '';
+
+            const e2eOutput = e2eExists ? stripAnsi(e2eRaw) : '⚠️ No E2E test output found.';
+            const compOutput = compExists ? stripAnsi(compRaw) : '⚠️ No Component test output found.';
+
+            const e2ePassed = e2eOutput.includes('All specs passed!');
+            const compPassed = compOutput.includes('All specs passed!');
+
+            const body = [
+              '## 🧪 Cypress Test Results',
+              '',
+              `### 🔹 E2E Tests ${e2ePassed ? '✅' : '❌'}`,
+              '```txt',
+              e2eOutput.slice(-2000),
+              '```',
+              '',
+              `### 🔸 Component Tests ${compPassed ? '✅' : '❌'}`,
+              '```txt',
+              compOutput.slice(-2000),
+              '```',
+            ].join('\n');
+
+            github.rest.issues.createComment({
+              issue_number: context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
+
 
             const e2eExists = fs.existsSync('e2e-output.txt');
             const compExists = fs.existsSync('component-output.txt');
