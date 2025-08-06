@@ -29,19 +29,20 @@ RESPONSE=$(curl https://api.openai.com/v1/chat/completions \
   -s \
   -H "Authorization: Bearer $OPENAI_API_KEY" \
   -H "Content-Type: application/json" \
-  -d @- <<EOF
+  -d @- <<'EOF'
 {
   "model": "gpt-4o",
   "messages": [
     {
       "role": "user",
-      "content": $(jq -Rs <<< "$FULL_PROMPT")
+      "content": '"'"$FULL_PROMPT"'"'
     }
   ],
   "temperature": 0.3
 }
 EOF
 )
+
 
 # 🧪 DEBUG: Show raw API response
 echo "::group::🛠️ GPT Raw API Response"
