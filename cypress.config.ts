@@ -126,10 +126,12 @@ module.exports = defineConfig({
   },
 
   component: {
-    devServer: {
-      framework: "react",
-      bundler: "vite",
-    },
-
+  devServer: {
+    framework: "react",
+    bundler: "vite",
+  },
+  specPattern: "cypress/component/**/*.cy.{js,jsx,ts,tsx}",
+  supportFile: "cypress/support/component.{js,ts,jsx,tsx}",
+  indexHtmlFile: "cypress/support/component-index.html",
   },
 });
