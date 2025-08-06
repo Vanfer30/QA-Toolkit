@@ -17,7 +17,7 @@ jobs:
   test-unit:
     runs-on: ubuntu-latest
     outputs:
-      jest_status: ${{ steps.jest.outcome }}
+      jest_result: ${{ steps.jest.outcome }}
     steps:
       - uses: actions/checkout@v4
 
@@ -31,7 +31,8 @@ jobs:
 
       - name: Run Jest tests and generate coverage
         id: jest
-        run: npm run test:unit -- --coverage > jest-output.txt || true
+        run: npm run test:unit -- --coverage > jest-output.txt
+        continue-on-error: true
 
       - name: Upload Jest test report
         uses: actions/upload-artifact@v4
@@ -48,8 +49,8 @@ jobs:
   test-cypress:
     runs-on: ubuntu-latest
     outputs:
-      e2e_status: ${{ steps.e2e.outcome }}
-      comp_status: ${{ steps.comp.outcome }}
+      e2e_result: ${{ steps.e2e.outcome }}
+      comp_result: ${{ steps.comp.outcome }}
     steps:
       - uses: actions/checkout@v4
 
@@ -63,11 +64,13 @@ jobs:
 
       - name: Run Cypress E2E tests
         id: e2e
-        run: npx cypress run --e2e > e2e-output.txt || true
+        run: npx cypress run --e2e > e2e-output.txt
+        continue-on-error: true
 
       - name: Run Cypress Component tests
         id: comp
-        run: npx cypress run --component > component-output.txt || true
+        run: npx cypress run --component > component-output.txt
+        continue-on-error: true
 
       - name: Upload Cypress test reports
         uses: actions/upload-artifact@v4
@@ -101,9 +104,9 @@ jobs:
             const e2eOutput = stripAnsi(fs.readFileSync('artifacts/cypress-output/e2e-output.txt', 'utf8'));
             const compOutput = stripAnsi(fs.readFileSync('artifacts/cypress-output/component-output.txt', 'utf8'));
 
-            const e2ePassed = e2eOutput.includes('All specs passed!');
-            const compPassed = compOutput.includes('All specs passed!');
-            const jestPassed = jestOutput.toLowerCase().includes('pass');
+            const jestPassed = '${{ needs.test-unit.outputs.jest_result }}' === 'success';
+            const e2ePassed = '${{ needs.test-cypress.outputs.e2e_result }}' === 'success';
+            const compPassed = '${{ needs.test-cypress.outputs.comp_result }}' === 'success';
 
             const body = [
               '## ✅ CI Test Summary',
@@ -171,5 +174,5 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{
-            "text": "🔔 QA CI Summary for PR #${{ github.event.pull_request.number }}\nJest ✅ ${{ needs.test-unit.result }}\nCypress ✅ ${{ needs.test-cypress.result }}\nAI Coverage Posted ✅"
+            "text": "🔔 QA CI Summary for PR #${{ github.event.pull_request.number }}\nJest: ${{ needs.test-unit.outputs.jest_result == 'success' && '✅ Passed' || '❌ Failed' }}\nE2E: ${{ needs.test-cypress.outputs.e2e_result == 'success' && '✅ Passed' || '❌ Failed' }}\nComponent: ${{ needs.test-cypress.outputs.comp_result == 'success' && '✅ Passed' || '❌ Failed' }}\nAI Coverage: ✅ Posted"
           }' $SLACK_WEBHOOK_URL
