@@ -165,14 +165,40 @@ jobs:
             repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments
 
   notify-slack:
-    needs: [post-results, ai-coverage-audit]
+    needs: [post-results, ai-coverage-audit, test-unit, test-cypress]
     if: always()
     runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      JEST_RESULT: ${{ needs.test-unit.outputs.jest_result }}
+      E2E_RESULT: ${{ needs.test-cypress.outputs.e2e_result }}
+      COMP_RESULT: ${{ needs.test-cypress.outputs.comp_result }}
     steps:
-      - name: Send Slack notification
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{
-            "text": "🔔 QA CI Summary for PR #${{ github.event.pull_request.number }}\nJest: ${{ needs.test-unit.outputs.jest_result == 'success' && '✅ Passed' || '❌ Failed' }}\nE2E: ${{ needs.test-cypress.outputs.e2e_result == 'success' && '✅ Passed' || '❌ Failed' }}\nComponent: ${{ needs.test-cypress.outputs.comp_result == 'success' && '✅ Passed' || '❌ Failed' }}\nAI Coverage: ✅ Posted"
-          }' $SLACK_WEBHOOK_URL
+    - name: Send Slack notification
+      run: |
+        if [ "$JEST_RESULT" = "success" ]; then
+          jest_status="✅ Passed"
+        else
+          jest_status="❌ Failed"
+        fi
+
+        if [ "$E2E_RESULT" = "success" ]; then
+          e2e_status="✅ Passed"
+        else
+          e2e_status="❌ Failed"
+        fi
+
+        if [ "$COMP_RESULT" = "success" ]; then
+          comp_status="✅ Passed"
+        else
+          comp_status="❌ Failed"
+        fi
+
+        payload=$(jq -n \
+          --arg text "🔔 *QA CI Summary for PR #${{ github.event.pull_request.number }}*\nJest: $jest_status\nE2E: $e2e_status\nComponent: $comp_status\nAI Coverage: ✅ Posted" \
+          '{text: $text}')
+
+        curl -X POST -H 'Content-type: application/json' \
+          --data "$payload" \
+          "$SLACK_WEBHOOK_URL"
+
