@@ -33,65 +33,65 @@ jobs:
           path: coverage/coverage-summary.json
 
   test-cypress:
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v4
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Setup Node
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Run Cypress E2E tests
-      run: npx cypress run --e2e > e2e-output.txt || true
+      - name: Run Cypress E2E tests
+        run: npx cypress run --e2e > e2e-output.txt || true
 
-    - name: Run Cypress Component tests
-      run: npx cypress run --component > component-output.txt || true
+      - name: Run Cypress Component tests
+        run: npx cypress run --component > component-output.txt || true
 
-    - name: Post Cypress Test Results to PR
-      if: always()
-      uses: actions/github-script@v7
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const fs = require('fs');
-          const stripAnsi = require('strip-ansi');
+      - name: Post Cypress Test Results to PR
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const stripAnsi = require('strip-ansi');
 
-          const e2eExists = fs.existsSync('e2e-output.txt');
-          const compExists = fs.existsSync('component-output.txt');
+            const e2eExists = fs.existsSync('e2e-output.txt');
+            const compExists = fs.existsSync('component-output.txt');
 
-          const e2eRaw = e2eExists ? fs.readFileSync('e2e-output.txt', 'utf8') : '';
-          const compRaw = compExists ? fs.readFileSync('component-output.txt', 'utf8') : '';
+            const e2eRaw = e2eExists ? fs.readFileSync('e2e-output.txt', 'utf8') : '';
+            const compRaw = compExists ? fs.readFileSync('component-output.txt', 'utf8') : '';
 
-          const e2eOutput = e2eExists ? stripAnsi(e2eRaw) : '⚠️ No E2E test output found.';
-          const compOutput = compExists ? stripAnsi(compRaw) : '⚠️ No Component test output found.';
+            const e2eOutput = e2eExists ? stripAnsi(e2eRaw) : '⚠️ No E2E test output found.';
+            const compOutput = compExists ? stripAnsi(compRaw) : '⚠️ No Component test output found.';
 
-          const e2ePassed = e2eOutput.includes('All specs passed!');
-          const compPassed = compOutput.includes('All specs passed!');
+            const e2ePassed = e2eOutput.includes('All specs passed!');
+            const compPassed = compOutput.includes('All specs passed!');
 
-          const body = [
-            '## 🧪 Cypress Test Results',
-            '',
-            `### 🔹 E2E Tests ${e2ePassed ? '✅' : '❌'}`,
-            '```txt',
-            e2eOutput.slice(-2000),
-            '```',
-            '',
-            `### 🔸 Component Tests ${compPassed ? '✅' : '❌'}`,
-            '```txt',
-            compOutput.slice(-2000),
-            '```',
-          ].join('\n');
+            const body = [
+              '## 🧪 Cypress Test Results',
+              '',
+              `### 🔹 E2E Tests ${e2ePassed ? '✅' : '❌'}`,
+              '```txt',
+              e2eOutput.slice(-2000),
+              '```',
+              '',
+              `### 🔸 Component Tests ${compPassed ? '✅' : '❌'}`,
+              '```txt',
+              compOutput.slice(-2000),
+              '```',
+            ].join('\n');
 
-          github.rest.issues.createComment({
-            issue_number: context.payload.pull_request.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body
-          });
+            github.rest.issues.createComment({
+              issue_number: context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
 
   ai-coverage-audit:
     needs: test-unit
