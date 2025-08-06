@@ -57,7 +57,7 @@ jobs:
       - name: Run Cypress E2E tests
         run: npx cypress run --e2e
 
-   test-cypress-component:
+  test-cypress-component:
     runs-on: ubuntu-latest
     defaults:
       run:
