@@ -40,10 +40,10 @@ jobs:
           path: coverage/coverage-summary.json
       
       
-  - name: Show component test files  
-    run: ls -R cypress/component
+      - name: Show component test files  
+        run: ls -R cypress/component
 
-    
+
   test-cypress-e2e:
     runs-on: ubuntu-latest
 
