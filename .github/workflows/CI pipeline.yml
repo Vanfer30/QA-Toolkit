@@ -18,6 +18,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: .
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -38,19 +40,17 @@ jobs:
         with:
           name: coverage-summary
           path: coverage/coverage-summary.json
-      
-      
+
       - name: Show component test files  
         run: ls -R cypress/component
-
 
   test-cypress-e2e:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
-      with:
-      path: .
+        with:
+          path: .
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -68,9 +68,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-      with:
-      path: .
+        with:
+          path: .
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -90,6 +90,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: .
 
       - name: Download coverage report
         uses: actions/download-artifact@v4
