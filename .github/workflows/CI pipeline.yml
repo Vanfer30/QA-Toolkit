@@ -49,6 +49,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      with:
+      path: .
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -66,7 +68,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
+      with:
+      path: .
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
