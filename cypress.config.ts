@@ -106,13 +106,14 @@ module.exports = defineConfig({
     screenshotsFolder: "cypress/screenshots",
     scrollBehavior: "top",
     slowTestThreshold: 10000,
-    specPattern: [ "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",       
-    'cypress/api/**/*.cy.{js,ts}',  'cypress/component/**/*.cy.{js,ts,jsx,tsx}',    // 👈 Add this line for API tests
+    specPattern: [ 
+      "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",       
+      'cypress/api/**/*.cy.{js,ts}',  
+      'cypress/component/**/*.cy.{js,ts,jsx,tsx}',  
     ],
-    supportFile: "cypress/support/e2e.{js,jsx,ts,tsx}",
+    supportFile: "cypress/support/e2e.js",
     supportFolder: false,
     taskTimeout: 60000,
-    testingType: "e2e",
     testIsolation: true,
     trashAssetsBeforeRuns: true,
     userAgent: null,
@@ -131,7 +132,7 @@ module.exports = defineConfig({
     bundler: "vite",
   },
   specPattern: "cypress/component/**/*.cy.{js,jsx,ts,tsx}",
-  supportFile: "cypress/support/component.{js,ts,jsx,tsx}",
+  supportFile: "cypress/support/component.js",
   indexHtmlFile: "cypress/support/component-index.html",
   },
 });

@@ -11,6 +11,6 @@
     "types": ["cypress", "chai"]
 
   },
-  "include": ["./**/*.ts", "./**/*.tsx"]
+  "include": ["./**/*.ts", "./**/*.tsx", "support/component.js"]
 
 }
