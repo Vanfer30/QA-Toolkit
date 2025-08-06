@@ -32,7 +32,7 @@ jobs:
           name: coverage-summary
           path: coverage/coverage-summary.json
 
-    test-cypress:
+  test-cypress:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -95,8 +95,6 @@ jobs:
               repo: context.repo.repo,
               body
             });
-
-
 
   ai-coverage-audit:
     needs: test-unit
