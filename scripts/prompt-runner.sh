@@ -17,12 +17,12 @@ PROMPT=$(cat "$PROMPT_FILE")
 INPUT_DATA=$(cat "$INPUT_FILE")
 FULL_PROMPT="$PROMPT"$'\n\n'"$INPUT_DATA"
 
-# Show debug info
+# Show prompt debug
 echo "::group::🛠️ GPT Prompt Debug"
 echo "$FULL_PROMPT"
 echo "::endgroup::"
 
-# ✅ Build JSON safely using jq -n
+# ✅ Build JSON safely
 JSON_PAYLOAD=$(jq -n \
   --arg model "gpt-4o" \
   --arg content "$FULL_PROMPT" \
@@ -32,6 +32,11 @@ JSON_PAYLOAD=$(jq -n \
     temperature: 0.3
   }'
 )
+
+# 👇 Debug the final JSON payload
+echo "::group::🧪 Final JSON Payload"
+echo "$JSON_PAYLOAD" | jq .
+echo "::endgroup::"
 
 # 🔁 Make API request
 RESPONSE=$(curl https://api.openai.com/v1/chat/completions \
