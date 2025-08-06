@@ -41,7 +41,8 @@ EOF
 
 # Debug final JSON payload
 echo "::group::🧪 Final JSON Payload"
-echo "$JSON_PAYLOAD" | jq .
+echo "$JSON_PAYLOAD" | jq . || echo "❌ INVALID JSON!"
+echo "::endgroup::"
 echo "::endgroup::"
 
 # Send request to OpenAI API
