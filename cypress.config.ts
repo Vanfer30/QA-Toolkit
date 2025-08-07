@@ -2,6 +2,8 @@ import { defineConfig } from "cypress";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
+  projectId: "r926s1",
+
   component: {
     devServer: {
       framework: "react",
