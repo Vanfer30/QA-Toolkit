@@ -30,8 +30,8 @@
     "test:unit": "jest --config jest.config.ts --coverage",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "test:e2e": "cypress run --record --e2e",
-    "test:component": "cypress run --record --component",
+    "test:e2e": "cypress run --record --spec cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
+    "test:component": "cypress run --record --testing-type component",
     "test:all": "npm run test:unit && npm run test:e2e && npm run test:component"
 
   }
