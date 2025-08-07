@@ -49,9 +49,6 @@ jobs:
 
   test-cypress:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        container: [1, 2, 3] # 🔁 3 parallel jobs
     outputs:
       e2e_result: ${{ steps.e2e.outcome }}
       comp_result: ${{ steps.comp.outcome }}
@@ -65,9 +62,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run Cypress tests in parallel
-        run: npx cypress run --record --parallel --ci-build-id ${{ github.run_id }}
+        run: npx cypress run --record --ci-build-id ${{ github.run_id }}
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           
