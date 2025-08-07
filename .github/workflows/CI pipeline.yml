@@ -19,7 +19,8 @@ jobs:
     outputs:
       jest_result: ${{ steps.jest.outcome }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -174,79 +175,31 @@ jobs:
       E2E_RESULT: ${{ needs.test-cypress.outputs.e2e_result }}
       COMP_RESULT: ${{ needs.test-cypress.outputs.comp_result }}
     steps:
-      - name: Send Slack notification with rich formatting
-        run: |
-          start_time=$(date -u -d "${{ github.event.pull_request.updated_at }}" +%s)
-          end_time=$(date -u +%s)
-          total_duration_sec=$(( end_time - start_time ))
-          total_duration="$(printf '%02d:%02d' $((total_duration_sec/60)) $((total_duration_sec%60)))"
+    - name: Send Slack notification
+      run: |
+        if [ "$JEST_RESULT" = "success" ]; then
+          jest_status="✅ Passed"
+        else
+          jest_status="❌ Failed"
+        fi
 
-          # Dummy durations since GitHub doesn't give timestamps per job directly (you could fetch from API if needed)
-          jest_duration="~1 min"
-          e2e_duration="~1–2 min"
-          comp_duration="~1 min"
+        if [ "$E2E_RESULT" = "success" ]; then
+          e2e_status="✅ Passed"
+        else
+          e2e_status="❌ Failed"
+        fi
 
-          # Test status badges
-          jest_status=$([[ "$JEST_RESULT" == "success" ]] && echo "✅ Passed" || echo "❌ Failed")
-          e2e_status=$([[ "$E2E_RESULT" == "success" ]] && echo "✅ Passed" || echo "❌ Failed")
-          comp_status=$([[ "$COMP_RESULT" == "success" ]] && echo "✅ Passed" || echo "❌ Failed")
+        if [ "$COMP_RESULT" = "success" ]; then
+          comp_status="✅ Passed"
+        else
+          comp_status="❌ Failed"
+        fi
 
-          pr_url="https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
-          run_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        payload=$(jq -n \
+          --arg text "🔔 *QA CI Summary for PR #${{ github.event.pull_request.number }}*\nJest: $jest_status\nE2E: $e2e_status\nComponent: $comp_status\nAI Coverage: ✅ Posted" \
+          '{text: $text}')
 
-          payload=$(jq -n \
-          --arg pr_num "#${{ github.event.pull_request.number }}" \
-          --arg pr_url "$pr_url" \
-          --arg run_url "$run_url" \
-          --arg jest "$jest_status" \
-          --arg e2e "$e2e_status" \
-          --arg comp "$comp_status" \
-          --arg coverage "✅ Posted" \
-          --arg total_duration "$total_duration" \
-          --arg jest_duration "$jest_duration" \
-          --arg e2e_duration "$e2e_duration" \
-          --arg comp_duration "$comp_duration" \
-          '{
-            blocks: [
-              {
-                type: "header",
-                text: { type: "plain_text", text: "🚦 QA CI Summary for PR \($pr_num)", emoji: true }
-              },
-              {
-                type: "section",
-                fields: [
-                  { type: "mrkdwn", text: "*Jest Tests:* \($jest)\n⏱️ \($jest_duration)" },
-                  { type: "mrkdwn", text: "*E2E Tests:* \($e2e)\n⏱️ \($e2e_duration)" },
-                  { type: "mrkdwn", text: "*Component Tests:* \($comp)\n⏱️ \($comp_duration)" },
-                  { type: "mrkdwn", text: "*AI Coverage:* \($coverage)\n⏱️ Total: \($total_duration)" }
-                ]
-              },
-              {
-                type: "actions",
-                elements: [
-                  {
-                    type: "button",
-                    text: { type: "plain_text", text: "🔍 View Pull Request", emoji: true },
-                    url: $pr_url,
-                    style: "primary"
-                  },
-                  {
-                    type: "button",
-                    text: { type: "plain_text", text: "📄 View CI Summary", emoji: true },
-                    url: $run_url,
-                    style: "default"
-                  }
-                ]
-              },
-              {
-                type: "context",
-                elements: [
-                  { type: "mrkdwn", text: "Posted by *QA Toolkit Bot* via GitHub Actions" }
-                ]
-              }
-            ]
-          }')
-
-          curl -X POST -H "Content-type: application/json" --data "$payload" "$SLACK_WEBHOOK_URL"
-
+        curl -X POST -H 'Content-type: application/json' \
+          --data "$payload" \
+          "$SLACK_WEBHOOK_URL"
 
