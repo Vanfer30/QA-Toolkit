@@ -8,8 +8,9 @@ const config: Config = {
     }]
   },
   moduleFileExtensions: ['ts', 'tsx', 'js'],
-  testMatch: ['**/tests/**/*.test.ts']
-}
+  testMatch: ['**/tests/**/*.test.ts'],
 
+  coverageReporters: ['json-summary', 'text', 'lcov']
+}
 
 export default config
