@@ -33,5 +33,6 @@
     "test:e2e": "cypress run --spec cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
     "test:component": "cypress run --testing-type component",
     "test:all": "npm run test:unit && npm run test:e2e && npm run test:component"
+    
   }
 }
