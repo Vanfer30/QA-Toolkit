@@ -66,14 +66,14 @@ jobs:
       - name: Run Cypress E2E tests
         id: e2e
         run: |
-          npx cypress run --e2e --record --key ${{ secrets.CYPRESS_RECORD_KEY }} > e2e-output.txt 
+          npx cypress run --e2e > e2e-output.txt 
           cat e2e-output.txt
         continue-on-error: true
 
       - name: Run Cypress Component tests
         id: comp
         run: |
-          npx cypress run --component --record --key ${{ secrets.CYPRESS_RECORD_KEY }} > component-output.txt 
+          npx cypress run --component > component-output.txt 
           cat component-output.txt
         continue-on-error: true
 
@@ -139,71 +139,6 @@ jobs:
               body
             });
 
-  ai-coverage-audit:
-    needs: test-unit
-    runs-on: ubuntu-latest
-    env:
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download coverage report
-        uses: actions/download-artifact@v4
-        with:
-          name: coverage-summary
-          path: coverage/
-
-      - name: Run AI coverage analysis
-        run: |
-          chmod +x scripts/*.sh
-          ./scripts/github-coverage-bot.sh coverage/coverage-summary.json
-
-      - name: Post GPT report as PR comment
-        if: always()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh api \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -f body="$(cat .gpt-comment.md)" \
-            repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments
-
-  notify-slack:
-    needs: [post-results, ai-coverage-audit, test-unit, test-cypress]
-    if: always()
-    runs-on: ubuntu-latest
-    env:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      JEST_RESULT: ${{ needs.test-unit.outputs.jest_result }}
-      E2E_RESULT: ${{ needs.test-cypress.outputs.e2e_result }}
-      COMP_RESULT: ${{ needs.test-cypress.outputs.comp_result }}
-    steps:
-    - name: Send Slack notification
-      run: |
-        if [ "$JEST_RESULT" = "success" ]; then
-          jest_status="✅ Passed"
-        else
-          jest_status="❌ Failed"
-        fi
-
-        if [ "$E2E_RESULT" = "success" ]; then
-          e2e_status="✅ Passed"
-        else
-          e2e_status="❌ Failed"
-        fi
-
-        if [ "$COMP_RESULT" = "success" ]; then
-          comp_status="✅ Passed"
-        else
-          comp_status="❌ Failed"
-        fi
-
-        payload=$(jq -n \
-          --arg text "🔔 *QA CI Summary for PR #${{ github.event.pull_request.number }}*\nJest: $jest_status\nE2E: $e2e_status\nComponent: $comp_status\nAI Coverage: ✅ Posted" \
-          '{text: $text}')
-
-        curl -X POST -H 'Content-type: application/json' \
-          --data "$payload" \
-          "$SLACK_WEBHOOK_URL"
+  # Removed AI coverage audit job due to sensitive API key
+  # Removed Slack notification job due to sensitive webhook URL
 
