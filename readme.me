@@ -14,10 +14,7 @@ Automatically posts GPT-powered test coverage and flaky log summaries to pull re
 - Optional Slack notifications (via webhook)
 
 ## Setup
-1. Add these secrets to your repo:
-   - `OPENAI_API_KEY`
-   - *(optional)* `SLACK_WEBHOOK_URL`
-2. Push your test output files:
+1. Push your test output files:
    - `coverage/coverage-summary.json`
    - `logs/test-failures.txt`
 
@@ -32,9 +29,7 @@ To implement in an already existing project with cypress tests
    - scripts/
    - prompts/
 
-2. Add OPENAI_API_KEY and optional SLACK_WEBHOOK_URL
-   - `OPENAI_API_KEY`
-   - *(optional)* `SLACK_WEBHOOK_URL`
+2. Ensure your existing Cypress test step generates:
 
 3. Make sure your existing Cypress test step generates:
    - coverage/coverage-summary.json

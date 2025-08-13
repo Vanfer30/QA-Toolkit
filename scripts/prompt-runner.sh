@@ -3,10 +3,11 @@
 PROMPT_FILE=$1
 INPUT_FILE=$2
 
-if [[ -z "$OPENAI_API_KEY" ]]; then
-  echo "❌ Set your OPENAI_API_KEY environment variable first."
-  exit 1
-fi
+# OPENAI_API_KEY removed for security - add this secret in GitHub if needed
+# if [[ -z "$OPENAI_API_KEY" ]]; then
+#   echo "❌ Set your OPENAI_API_KEY environment variable first."
+#   exit 1
+# fi
 
 if [[ ! -f "$PROMPT_FILE" ]] || [[ ! -f "$INPUT_FILE" ]]; then
   echo "❌ Missing input: prompt or data file not found."
@@ -47,7 +48,7 @@ echo "::endgroup::"
 
 # Send request to OpenAI API
 RESPONSE=$(curl -s https://api.openai.com/v1/chat/completions \
-  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  # -H "Authorization: Bearer $OPENAI_API_KEY" \
   -H "Content-Type: application/json" \
   -d "$JSON_PAYLOAD"
 )
