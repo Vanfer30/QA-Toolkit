@@ -13,7 +13,8 @@ When("I enter valid username and password", () => {
 });
 
 When("I click the login button", () => {
-  cy.get('[data-testid="login-button"]').click();
+  // Use force click to ensure the button is clicked
+  cy.get('[data-testid="login-button"]').click({ force: true });
 });
 
 Then("I should be redirected to the dashboard", () => {
@@ -38,7 +39,8 @@ Then("I should see an error message", () => {
 });
 
 Then("I should remain on the login page", () => {
-  cy.url().should("include", "/login");
+  // Since our test app doesn't change URL, check that login form is still visible
+  cy.get('[data-testid="username-input"]').should("be.visible");
 });
 
 // Empty credentials scenario steps

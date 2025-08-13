@@ -69,6 +69,32 @@
             }
         });
         
+        // Also handle button click for login
+        document.querySelector('[data-testid="login-button"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Hide all messages
+            document.querySelectorAll('.error, .success').forEach(el => el.style.display = 'none');
+            
+            if (!username || !password) {
+                // Show validation errors
+                if (!username) document.querySelector('[data-testid="username-error"]').style.display = 'block';
+                if (!password) document.querySelector('[data-testid="password-error"]').style.display = 'block';
+                return;
+            }
+            
+            if (username === 'validuser@example.com' && password === 'validpassword123') {
+                // Success - show dashboard
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+            } else {
+                // Error
+                document.querySelector('[data-testid="error-message"]').style.display = 'block';
+            }
+        });
+        
         // Logout functionality
         document.querySelector('[data-testid="logout-button"]').addEventListener('click', function() {
             document.getElementById('dashboard').style.display = 'none';

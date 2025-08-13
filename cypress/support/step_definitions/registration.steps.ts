@@ -44,8 +44,8 @@ Then("the error should indicate the email already exists", () => {
   cy.get('[data-testid="error-message"]').should("contain", "email already exists");
 });
 
-// Validation error steps
-Then("I should see validation error messages", () => {
+// Validation error steps - using unique step name to avoid conflicts
+Then("I should see registration validation error messages", () => {
   cy.get('[data-testid="validation-error"]').should("be.visible");
 });
 
