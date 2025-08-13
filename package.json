@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "claude": "^0.1.1",
     "k6": "^0.0.0"
   },
   "devDependencies": {
@@ -11,6 +12,7 @@
     "@types/jest": "^30.0.0",
     "@types/mocha": "^10.0.10",
     "@vitejs/plugin-react": "^4.7.0",
+    "browserstack-local": "^1.5.8",
     "cypress": "^14.5.3",
     "cypress-cucumber-preprocessor": "^4.3.1",
     "esbuild": "^0.25.8",
@@ -41,6 +43,11 @@
     "test:search": "cypress run --spec cypress/e2e/features/search.feature",
     "test:registration": "cypress run --spec cypress/e2e/features/registration.feature",
     "test:component": "cypress run --testing-type component",
-    "test:all": "npm run test:unit && npm run test:e2e && npm run test:component"
+    "test:all": "npm run test:unit && npm run test:e2e && npm run test:component",
+    "browserstack:tunnel:start": "node scripts/browserstack-tunnel.js start",
+    "browserstack:tunnel:stop": "node scripts/browserstack-tunnel.js stop",
+    "test:browserstack": "node scripts/run-browserstack-tests.js",
+    "test:browserstack:login": "npx cypress run --config-file cypress.browserstack.config.ts --spec cypress/e2e/features/login.feature",
+    "test:browserstack:features": "npx cypress run --config-file cypress.browserstack.config.ts --spec cypress/e2e/features/**/*.feature"
   }
 }

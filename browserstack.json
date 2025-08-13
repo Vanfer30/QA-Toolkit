@@ -1,0 +1,43 @@
+{
+  "browsers": [
+    {
+      "browser": "chrome",
+      "os": "Windows 10",
+      "versions": ["latest", "latest-1"]
+    },
+    {
+      "browser": "firefox",
+      "os": "Windows 10",
+      "versions": ["latest", "latest-1"]
+    },
+    {
+      "browser": "edge",
+      "os": "Windows 10",
+      "versions": ["latest"]
+    },
+    {
+      "browser": "safari",
+      "os": "OS X Big Sur",
+      "versions": ["latest"]
+    },
+    {
+      "browser": "chrome",
+      "os": "OS X Big Sur",
+      "versions": ["latest"]
+    }
+  ],
+  "run_settings": {
+    "cypress_config_file": "cypress.config.ts",
+    "build_name": "QA-Toolkit Cypress Tests",
+    "project_name": "QA-Toolkit",
+    "parallels": 3,
+    "npm_dependencies": {
+      "cypress": "14.5.3",
+      "@badeball/cypress-cucumber-preprocessor": "22.2.0"
+    }
+  },
+  "connection_settings": {
+    "local": true,
+    "local_identifier": "qa-toolkit-local"
+  }
+}
