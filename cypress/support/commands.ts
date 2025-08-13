@@ -35,3 +35,7 @@
 //     }
 //   }
 // }
+
+
+import './commands'; // your custom Cypress commands (no Given/When/Then here)
+

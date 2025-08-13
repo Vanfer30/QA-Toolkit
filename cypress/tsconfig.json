@@ -8,9 +8,9 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
-    "types": ["cypress", "chai"]
+    "types": ["cypress", "chai", "@badeball/cypress-cucumber-preprocessor"]
 
   },
-  "include": ["./**/*.ts", "./**/*.tsx", "support/component.js", "../cypress.config.ts"]
-
-}
+  "include": ["./**/*.ts", "./**/*.tsx", "support/component.ts", "../cypress.config.ts", "support/e2e.js"]
+ 
+} 

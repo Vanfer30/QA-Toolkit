@@ -8,10 +8,17 @@
     "moduleResolution": "node",
     "jsx": "react-jsx",        // or "react" if using React 17
     "baseUrl": ".",            
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["cypress", "@badeball/cypress-cucumber-preprocessor"]
+
   },
   "include": [
     "cypress",                 // 👈 include all Cypress tests (component, e2e, etc)
-    "src"                      // if you have source files
-, "cypress.config.ts"  ]
+    "src",                     // if you have source files
+    "cypress.config.ts", 
+    "cypress/**/*.ts", 
+    "cypress/**/*.d.ts", 
+    "cypress.config.ts"],
+
 }
+

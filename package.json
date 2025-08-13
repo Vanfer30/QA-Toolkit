@@ -3,6 +3,8 @@
     "k6": "^0.0.0"
   },
   "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^22.2.0",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.5",
     "@cypress/react": "^9.0.1",
     "@cypress/vite-dev-server": "^6.0.3",
     "@types/chai": "^5.2.2",
@@ -10,6 +12,8 @@
     "@types/mocha": "^10.0.10",
     "@vitejs/plugin-react": "^4.7.0",
     "cypress": "^14.5.3",
+    "cypress-cucumber-preprocessor": "^4.3.1",
+    "esbuild": "^0.25.8",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
     "mochawesome": "^7.1.3",
@@ -31,8 +35,12 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "test:e2e": "cypress run --spec cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
+    "test:features": "cypress run --spec cypress/e2e/features/**/*.feature",
+    "test:login": "cypress run --spec cypress/e2e/features/login.feature",
+    "test:user-management": "cypress run --spec cypress/e2e/features/user-management.feature",
+    "test:search": "cypress run --spec cypress/e2e/features/search.feature",
+    "test:registration": "cypress run --spec cypress/e2e/features/registration.feature",
     "test:component": "cypress run --testing-type component",
     "test:all": "npm run test:unit && npm run test:e2e && npm run test:component"
-    
   }
 }

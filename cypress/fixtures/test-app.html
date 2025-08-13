@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Application</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .form-group { margin: 20px 0; }
+        label { display: block; margin-bottom: 5px; }
+        input, button { padding: 10px; margin: 5px 0; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Test Application</h1>
+    
+    <!-- Login Form -->
+    <div id="login-form">
+        <h2>Login</h2>
+        <form>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="email" id="username" data-testid="username-input" placeholder="Enter username">
+                <div class="error" data-testid="username-error" style="display: none;">Username is required</div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" data-testid="password-input" placeholder="Enter password">
+                <div class="error" data-testid="password-error" style="display: none;">Password is required</div>
+            </div>
+            <button type="submit" data-testid="login-button">Login</button>
+        </form>
+        <div class="error" data-testid="error-message" style="display: none;">Invalid credentials</div>
+    </div>
+
+    <!-- Dashboard (hidden initially) -->
+    <div id="dashboard" style="display: none;">
+        <h2>Dashboard</h2>
+        <div class="success" data-testid="welcome-message">Welcome to the dashboard!</div>
+        <button data-testid="logout-button">Logout</button>
+    </div>
+
+    <script>
+        // Simple form handling
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Hide all messages
+            document.querySelectorAll('.error, .success').forEach(el => el.style.display = 'none');
+            
+            if (!username || !password) {
+                // Show validation errors
+                if (!username) document.querySelector('[data-testid="username-error"]').style.display = 'block';
+                if (!password) document.querySelector('[data-testid="password-error"]').style.display = 'block';
+                return;
+            }
+            
+            if (username === 'validuser@example.com' && password === 'validpassword123') {
+                // Success - show dashboard
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+            } else {
+                // Error
+                document.querySelector('[data-testid="error-message"]').style.display = 'block';
+            }
+        });
+        
+        // Logout functionality
+        document.querySelector('[data-testid="logout-button"]').addEventListener('click', function() {
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        });
+    </script>
+</body>
+</html>
