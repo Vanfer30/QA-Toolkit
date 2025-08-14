@@ -50,3 +50,4 @@ if (!process.env.BROWSERSTACK_ACCESS_KEY || !process.env.BROWSERSTACK_USERNAME) 
 
 // Run the tests
 runBrowserStackTests();
+
