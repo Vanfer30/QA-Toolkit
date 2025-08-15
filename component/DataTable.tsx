@@ -40,8 +40,8 @@ export default function DataTable({
     // Apply sorting
     if (sortColumn) {
       result.sort((a, b) => {
-        const aVal = a[sortColumn]
-        const bVal = b[sortColumn]
+        const aVal = String(a[sortColumn]).toLowerCase()
+        const bVal = String(b[sortColumn]).toLowerCase()
         
         if (aVal < bVal) return sortDirection === 'asc' ? -1 : 1
         if (aVal > bVal) return sortDirection === 'asc' ? 1 : -1
@@ -63,6 +63,7 @@ export default function DataTable({
       setSortColumn(columnKey)
       setSortDirection('asc')
     }
+    setCurrentPage(1) // Reset to first page when sorting
   }
 
   const handleFilter = (columnKey: string, value: string) => {

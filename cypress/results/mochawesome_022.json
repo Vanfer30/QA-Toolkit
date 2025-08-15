@@ -1,0 +1,143 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 3,
+    "passes": 3,
+    "pending": 0,
+    "failures": 0,
+    "start": "2025-08-14T15:11:30.513Z",
+    "end": "2025-08-14T15:11:34.600Z",
+    "duration": 4087,
+    "testsRegistered": 3,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "77942e5f-ce46-4d02-8378-120e97c27311",
+      "title": "",
+      "fullFile": "cypress\\e2e\\cypress.Playground.cy.ts",
+      "file": "cypress\\e2e\\cypress.Playground.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "5cc5296a-d43f-4acb-b549-ed3e560681f7",
+          "title": "Basic Cypress Interactions - Part 2",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Find elements by .get()",
+              "fullTitle": "Basic Cypress Interactions - Part 2 Find elements by .get()",
+              "timedOut": null,
+              "duration": 817,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"https://example.cypress.io/commands/querying\");\ncy.get(\"#query-btn\").should(\"exist\").should(\"contain\", \"Button\").click();",
+              "err": {},
+              "uuid": "d5828fae-9d02-41ff-8714-a178b7c1c598",
+              "parentUUID": "5cc5296a-d43f-4acb-b549-ed3e560681f7",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Find elements by .contains()",
+              "fullTitle": "Basic Cypress Interactions - Part 2 Find elements by .contains()",
+              "timedOut": null,
+              "duration": 333,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"https://example.cypress.io/commands/querying\");\ncy.get(\".query-list\").contains(\"apples\").should(\"have.class\", \"first\");\ncy.get(\".query-list\").contains(\"oranges\").should(\"have.class\", \"second\");\ncy.get(\".query-list\").contains(\"bananas\").should(\"have.class\", \"third\");\ncy.get(\".query-list\").contains(\"more apples\").should(\"have.class\", \"fourth\");\ncy.get(\".query-button\").contains(\"Save Form\").should(\"have.class\", \"btn\");",
+              "err": {},
+              "uuid": "8217c861-0bd3-48b7-be91-dca7882f0040",
+              "parentUUID": "5cc5296a-d43f-4acb-b549-ed3e560681f7",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Find elements by .within()",
+              "fullTitle": "Basic Cypress Interactions - Part 2 Find elements by .within()",
+              "timedOut": null,
+              "duration": 254,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"https://example.cypress.io/commands/querying\");\ncy.get(\".query-form\").within(() => {\n  cy.get(\"input:first\").should(\"have.attr\", \"placeholder\", \"Email\");\n  cy.get(\"input:last\").should(\"have.attr\", \"placeholder\", \"Password\");\n});",
+              "err": {},
+              "uuid": "094175a0-ee9f-4f75-9ff8-5973f35acb34",
+              "parentUUID": "5cc5296a-d43f-4acb-b549-ed3e560681f7",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "d5828fae-9d02-41ff-8714-a178b7c1c598",
+            "8217c861-0bd3-48b7-be91-dca7882f0040",
+            "094175a0-ee9f-4f75-9ff8-5973f35acb34"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 1404,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

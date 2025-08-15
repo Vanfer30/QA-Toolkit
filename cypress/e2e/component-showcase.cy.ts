@@ -85,7 +85,7 @@ describe('Component Showcase', () => {
 
   it('demonstrates Slider functionality', () => {
     // Test slider interaction
-    cy.get('[data-cy="slider-track"]').click({ position: 'right' })
+    cy.get('[data-cy="slider-track"]').click('right')
     cy.get('[data-cy="slider-value"]').should('not.contain', '0')
     
     // Test keyboard navigation

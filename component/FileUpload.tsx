@@ -71,7 +71,7 @@ export default function FileUpload({
       }
     }
 
-    if (errors.length === 0) {
+    if (newFiles.length > 0) {
       setFiles(prev => multiple ? [...prev, ...newFiles] : newFiles)
     }
   }
@@ -218,24 +218,28 @@ export default function FileUpload({
               </button>
             </div>
           ))}
-          
-          <button
-            data-cy="upload-button"
-            onClick={handleUpload}
-            disabled={uploading}
-            style={{
-              backgroundColor: '#007bff',
-              color: 'white',
-              border: 'none',
-              padding: '10px 20px',
-              borderRadius: '4px',
-              cursor: uploading ? 'not-allowed' : 'pointer',
-              opacity: uploading ? 0.6 : 1
-            }}
-          >
-            {uploading ? 'Uploading...' : 'Upload Files'}
-          </button>
         </div>
+      )}
+      
+      {/* Upload Button */}
+      {files.length > 0 && (
+        <button
+          data-cy="upload-button"
+          onClick={handleUpload}
+          disabled={uploading}
+          style={{
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            padding: '10px 20px',
+            borderRadius: '4px',
+            cursor: uploading ? 'not-allowed' : 'pointer',
+            opacity: uploading ? 0.6 : 1,
+            marginTop: '10px'
+          }}
+        >
+          {uploading ? 'Uploading...' : 'Upload Files'}
+        </button>
       )}
     </div>
   )

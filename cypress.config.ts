@@ -13,14 +13,14 @@ export default defineConfig({
       viteConfig: { plugins: [react()] },
     },
     specPattern: 'cypress/component/**/*.cy.{js,jsx,ts,tsx}',
-    supportFile: 'cypress/support/component.ts',  // <-- TS
+    supportFile: 'cypress/support/component.ts',
     indexHtmlFile: 'cypress/support/component-index.html',
   },
 
   e2e: {
+    baseUrl: 'http://localhost:3000',
     specPattern: "cypress/e2e/**/*.{cy.{js,jsx,ts,tsx},feature}", 
-    supportFile: 'cypress/support/e2e.ts',  
-          // <-- TS
+    supportFile: 'cypress/support/e2e.ts',
     async setupNodeEvents(on, config) {
       await addCucumberPreprocessorPlugin(on, config);
       

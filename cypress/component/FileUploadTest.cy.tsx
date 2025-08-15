@@ -46,16 +46,16 @@ describe('<FileUpload />', () => {
   })
 
   it('calls onUpload when upload button is clicked', () => {
-    const uploadSpy = cy.stub().as('uploadSpy')
+    const uploadSpy = cy.stub()
     cy.mount(<FileUpload onUpload={uploadSpy} />)
     
     cy.get('[data-cy="file-input"]').selectFile('cypress/fixtures/example.json', { force: true })
     cy.get('[data-cy="upload-button"]').click()
-    cy.get('@uploadSpy').should('have.been.called')
+    cy.wrap(uploadSpy).should('have.been.called')
   })
 
   it('shows uploading state', () => {
-    const uploadSpy = cy.stub().as('uploadSpy')
+    const uploadSpy = cy.stub()
     cy.mount(<FileUpload onUpload={uploadSpy} />)
     
     cy.get('[data-cy="file-input"]').selectFile('cypress/fixtures/example.json', { force: true })
@@ -64,7 +64,7 @@ describe('<FileUpload />', () => {
   })
 
   it('clears files after successful upload', () => {
-    const uploadSpy = cy.stub().as('uploadSpy')
+    const uploadSpy = cy.stub()
     cy.mount(<FileUpload onUpload={uploadSpy} />)
     
     cy.get('[data-cy="file-input"]').selectFile('cypress/fixtures/example.json', { force: true })
@@ -81,7 +81,7 @@ describe('<FileUpload />', () => {
   })
 
   it('validates file size when maxSize is set', () => {
-    const errorSpy = cy.stub().as('errorSpy')
+    const errorSpy = cy.stub()
     cy.mount(<FileUpload maxSize={100} onError={errorSpy} />)
     
     // Create a large file for testing
@@ -90,16 +90,16 @@ describe('<FileUpload />', () => {
       cy.writeFile('cypress/fixtures/large-file.json', largeContent)
       
       cy.get('[data-cy="file-input"]').selectFile('cypress/fixtures/large-file.json', { force: true })
-      cy.get('@errorSpy').should('have.been.called')
+      cy.wrap(errorSpy).should('have.been.called')
     })
   })
 
   it('validates file type when accept is set', () => {
-    const errorSpy = cy.stub().as('errorSpy')
+    const errorSpy = cy.stub()
     cy.mount(<FileUpload accept="image/*" onError={errorSpy} />)
     
     cy.get('[data-cy="file-input"]').selectFile('cypress/fixtures/example.json', { force: true })
-    cy.get('@errorSpy').should('have.been.called')
+    cy.wrap(errorSpy).should('have.been.called')
   })
 
   it('shows accepted file types in the UI', () => {
@@ -117,7 +117,7 @@ describe('<FileUpload />', () => {
   })
 
   it('prevents upload when no files are selected', () => {
-    const uploadSpy = cy.stub().as('uploadSpy')
+    const uploadSpy = cy.stub()
     cy.mount(<FileUpload onUpload={uploadSpy} />)
     
     cy.get('[data-cy="upload-button"]').should('not.exist')
@@ -148,17 +148,17 @@ describe('<FileUpload />', () => {
   })
 
   it('handles upload errors gracefully', () => {
-    const uploadSpy = cy.stub().throws(new Error('Upload failed')).as('uploadSpy')
-    const errorSpy = cy.stub().as('errorSpy')
+    const uploadSpy = cy.stub().throws(new Error('Upload failed'))
+    const errorSpy = cy.stub()
     cy.mount(<FileUpload onUpload={uploadSpy} onError={errorSpy} />)
     
     cy.get('[data-cy="file-input"]').selectFile('cypress/fixtures/example.json', { force: true })
     cy.get('[data-cy="upload-button"]').click()
-    cy.get('@errorSpy').should('have.been.calledWith', 'Upload failed')
+    cy.wrap(errorSpy).should('have.been.calledWith', 'Upload failed')
   })
 
   it('resets uploading state after error', () => {
-    const uploadSpy = cy.stub().throws(new Error('Upload failed')).as('uploadSpy')
+    const uploadSpy = cy.stub().throws(new Error('Upload failed'))
     cy.mount(<FileUpload onUpload={uploadSpy} />)
     
     cy.get('[data-cy="file-input"]').selectFile('cypress/fixtures/example.json', { force: true })

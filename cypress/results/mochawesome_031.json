@@ -1,0 +1,378 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 13,
+    "passes": 2,
+    "pending": 0,
+    "failures": 11,
+    "start": "2025-08-14T15:50:14.717Z",
+    "end": "2025-08-14T15:51:04.948Z",
+    "duration": 50231,
+    "testsRegistered": 13,
+    "passPercent": 15.384615384615385,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "32eff425-bf35-4627-8f61-684919eccb89",
+      "title": "",
+      "fullFile": "cypress\\e2e\\component-showcase.cy.ts",
+      "file": "cypress\\e2e\\component-showcase.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "277a7c8e-274d-42aa-a165-2d907afedc4b",
+          "title": "Component Showcase",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "demonstrates DataTable functionality",
+              "fullTitle": "Component Showcase demonstrates DataTable functionality",
+              "timedOut": null,
+              "duration": 5412,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-cy=\"sort-name\"]').click();\ncy.get('[data-cy=\"cell-name\"]').first().should(\"contain\", \"Alice Brown\");\ncy.get('[data-cy=\"filter-role\"]').type(\"Admin\");\ncy.get('[data-cy=\"table-row\"]').should(\"have.length\", 2);\ncy.get('[data-cy=\"next-page\"]').click();\ncy.get('[data-cy=\"page-info\"]').should(\"contain\", \"Page 2 of 2\");",
+              "err": {
+                "message": "AssertionError: Timed out retrying after 4000ms: expected '<td>' to contain 'Alice Brown'",
+                "estack": "AssertionError: Timed out retrying after 4000ms: expected '<td>' to contain 'Alice Brown'\n    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress\\e2e\\component-showcase.cy.ts:10:47)",
+                "diff": null
+              },
+              "uuid": "4cb41c71-8f72-4919-b635-0598e8a2e30c",
+              "parentUUID": "277a7c8e-274d-42aa-a165-2d907afedc4b",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "demonstrates MultiStepForm workflow",
+              "fullTitle": "Component Showcase demonstrates MultiStepForm workflow",
+              "timedOut": null,
+              "duration": 5215,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-cy=\"step1-input\"]').type(\"Personal Information\");\ncy.get('[data-cy=\"step1-next\"]').click();\ncy.get('[data-cy=\"step-title\"]').should(\"contain\", \"Step 2\");\ncy.get('[data-cy=\"step2-input\"]').type(\"Contact Details\");\ncy.get('[data-cy=\"step2-next\"]').click();\ncy.get('[data-cy=\"step-title\"]').should(\"contain\", \"Step 3\");\ncy.get('[data-cy=\"step3-input\"]').type(\"Final Step\");\ncy.get('[data-cy=\"next-button\"]').click();\ncy.get('[data-cy=\"multi-step-form\"]').should(\"not.exist\");",
+              "err": {
+                "message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `[data-cy=\"step1-next\"]`, but never found it.",
+                "estack": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `[data-cy=\"step1-next\"]`, but never found it.\n    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress\\e2e\\component-showcase.cy.ts:18:10)",
+                "diff": null
+              },
+              "uuid": "4430aedf-f1a9-4669-a887-fed798918e7c",
+              "parentUUID": "277a7c8e-274d-42aa-a165-2d907afedc4b",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "demonstrates FileUpload functionality",
+              "fullTitle": "Component Showcase demonstrates FileUpload functionality",
+              "timedOut": null,
+              "duration": 4547,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-cy=\"file-input\"]').selectFile(\"cypress/fixtures/example.json\");\ncy.get('[data-cy=\"file-item\"]').should(\"be.visible\");\ncy.get('[data-cy=\"file-name\"]').should(\"contain\", \"example.json\");\ncy.get('[data-cy=\"remove-file\"]').click();\ncy.get('[data-cy=\"file-item\"]').should(\"not.exist\");",
+              "err": {
+                "message": "CypressError: Timed out retrying after 4000ms: `cy.selectFile()` failed because this element is not visible:\n\n`<input accept=\"*\" data-cy=\"file-input\" type=\"file\" style=\"display: none;\">`\n\nThis element `<input>` is not visible because it has CSS property: `display: none`\n\nFix this problem, or use `{force: true}` to disable error checking.\n\nhttps://on.cypress.io/element-cannot-be-interacted-with",
+                "estack": "CypressError: Timed out retrying after 4000ms: `cy.selectFile()` failed because this element is not visible:\n\n`<input accept=\"*\" data-cy=\"file-input\" type=\"file\" style=\"display: none;\">`\n\nThis element `<input>` is not visible because it has CSS property: `display: none`\n\nFix this problem, or use `{force: true}` to disable error checking.\n\nhttps://on.cypress.io/element-cannot-be-interacted-with\n    at runVisibilityCheck (http://localhost:3000/__cypress/runner/cypress_runner.js:148378:58)\n    at Object.isStrictlyVisible (http://localhost:3000/__cypress/runner/cypress_runner.js:148392:10)\n    at runAllChecks (http://localhost:3000/__cypress/runner/cypress_runner.js:114743:26)\n    at retryActionability (http://localhost:3000/__cypress/runner/cypress_runner.js:114811:16)\n    at tryCatcher (http://localhost:3000/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:3000/__cypress/runner/cypress_runner.js:4285:29)\n    at whenStable (http://localhost:3000/__cypress/runner/cypress_runner.js:147205:68)\n    at <unknown> (http://localhost:3000/__cypress/runner/cypress_runner.js:147146:14)\n    at tryCatcher (http://localhost:3000/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise._settlePromiseFromHandler (http://localhost:3000/__cypress/runner/cypress_runner.js:1489:31)\n    at Promise._settlePromise (http://localhost:3000/__cypress/runner/cypress_runner.js:1546:18)\n    at Promise._settlePromise0 (http://localhost:3000/__cypress/runner/cypress_runner.js:1591:10)\n    at Promise._settlePromises (http://localhost:3000/__cypress/runner/cypress_runner.js:1671:18)\n    at Promise._fulfill (http://localhost:3000/__cypress/runner/cypress_runner.js:1615:18)\n    at <unknown> (http://localhost:3000/__cypress/runner/cypress_runner.js:5420:46)",
+                "diff": null
+              },
+              "uuid": "a1073229-de9c-4dce-90e7-f1c4fbea0ead",
+              "parentUUID": "277a7c8e-274d-42aa-a165-2d907afedc4b",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "demonstrates Modal functionality",
+              "fullTitle": "Component Showcase demonstrates Modal functionality",
+              "timedOut": null,
+              "duration": 1009,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-cy=\"open-modal\"]').click();\ncy.get('[data-cy=\"modal-backdrop\"]').should(\"be.visible\");\ncy.get('[data-cy=\"modal-content\"]').should(\"be.visible\");\ncy.get('[data-cy=\"modal-close\"]').click();\ncy.get('[data-cy=\"modal-backdrop\"]').should(\"not.exist\");",
+              "err": {
+                "message": "CypressError: `cy.click()` can only be called on a single element. Your subject contained 2 elements. Pass `{ multiple: true }` if you want to serially click each element.\n\nhttps://on.cypress.io/click",
+                "estack": "CypressError: `cy.click()` can only be called on a single element. Your subject contained 2 elements. Pass `{ multiple: true }` if you want to serially click each element.\n\nhttps://on.cypress.io/click\n    at mouseAction (http://localhost:3000/__cypress/runner/cypress_runner.js:113980:68)\n    at Context.click (http://localhost:3000/__cypress/runner/cypress_runner.js:114147:14)\n    at wrapped (http://localhost:3000/__cypress/runner/cypress_runner.js:141532:19)\n    at <unknown> (http://localhost:3000/__cypress/runner/cypress_runner.js:147477:15)\n    at tryCatcher (http://localhost:3000/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise._settlePromiseFromHandler (http://localhost:3000/__cypress/runner/cypress_runner.js:1489:31)\n    at Promise._settlePromise (http://localhost:3000/__cypress/runner/cypress_runner.js:1546:18)\n    at Promise._settlePromiseCtx (http://localhost:3000/__cypress/runner/cypress_runner.js:1583:10)\n    at _drainQueueStep (http://localhost:3000/__cypress/runner/cypress_runner.js:2381:12)\n    at _drainQueue (http://localhost:3000/__cypress/runner/cypress_runner.js:2370:9)\n    at Async._drainQueues (http://localhost:3000/__cypress/runner/cypress_runner.js:2386:5)\n    at Async.drainQueues (http://localhost:3000/__cypress/runner/cypress_runner.js:2256:14)",
+                "diff": null
+              },
+              "uuid": "2b3a3675-7b3c-407d-b618-81d76f86fc83",
+              "parentUUID": "277a7c8e-274d-42aa-a165-2d907afedc4b",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "demonstrates Tabs functionality",
+              "fullTitle": "Component Showcase demonstrates Tabs functionality",
+              "timedOut": null,
+              "duration": 551,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-cy=\"tab-tab2\"]').click();\ncy.get('[data-cy=\"tab-tab2\"]').should(\"have.attr\", \"aria-selected\", \"true\");\ncy.get('[data-cy=\"tab-panel\"]').should(\"contain\", \"Content for tab 2\");\ncy.get('[data-cy=\"tab-tab1\"]').focus();\ncy.get('[data-cy=\"tab-tab1\"]').type(\"{rightarrow}\");\ncy.get('[data-cy=\"tab-tab2\"]').should(\"be.focused\");",
+              "err": {},
+              "uuid": "cfa645c2-3e27-48cc-b0ee-c6947dc1f31a",
+              "parentUUID": "277a7c8e-274d-42aa-a165-2d907afedc4b",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "demonstrates Toast notifications",
+              "fullTitle": "Component Showcase demonstrates Toast notifications",
+              "timedOut": null,
+              "duration": 4748,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-cy=\"show-success\"]').click();\ncy.get('[data-cy=\"toast\"]').should(\"contain\", \"Success message\");\ncy.get('[data-cy=\"show-error\"]').click();\ncy.get('[data-cy=\"toast\"]').should(\"have.length\", 2);\ncy.get('[data-cy=\"toast-close\"]').first().click();\ncy.get('[data-cy=\"toast\"]').should(\"have.length\", 1);",
+              "err": {
+                "message": "AssertionError: Timed out retrying after 4000ms: Not enough elements found. Found '1', expected '2'.",
+                "estack": "AssertionError: Timed out retrying after 4000ms: Not enough elements found. Found '1', expected '2'.\n    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress\\e2e\\component-showcase.cy.ts:53:35)",
+                "diff": "- 1\n+ 2\n"
+              },
+              "uuid": "b86ee549-f3f3-4c67-b5ab-4076ee505414",
+              "parentUUID": "277a7c8e-274d-42aa-a165-2d907afedc4b",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "demonstrates Slider functionality",
+              "fullTitle": "Component Showcase demonstrates Slider functionality",
+              "timedOut": null,
+              "duration": 4459,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-cy=\"slider-track\"]').click(\"right\");\ncy.get('[data-cy=\"slider-value\"]').should(\"not.contain\", \"0\");\ncy.get('[data-cy=\"slider-track\"]').focus();\ncy.get('[data-cy=\"slider-track\"]').type(\"{rightarrow}\");\ncy.get('[data-cy=\"slider-value\"]').should(\"not.contain\", \"0\");",
+              "err": {
+                "message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `[data-cy=\"slider-track\"]`, but never found it.",
+                "estack": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `[data-cy=\"slider-track\"]`, but never found it.\n    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress\\e2e\\component-showcase.cy.ts:58:10)",
+                "diff": null
+              },
+              "uuid": "ec575657-5617-4dfa-9093-ae19849cb92c",
+              "parentUUID": "277a7c8e-274d-42aa-a165-2d907afedc4b",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "demonstrates Rating functionality",
+              "fullTitle": "Component Showcase demonstrates Rating functionality",
+              "timedOut": null,
+              "duration": 4473,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-cy=\"rating-star-3\"]').click();\ncy.get('[data-cy=\"rating-value\"]').should(\"contain\", \"4/5\");\ncy.get('[data-cy=\"rating-star-2\"]').trigger(\"mouseenter\");\ncy.get('[data-cy=\"rating-value\"]').should(\"contain\", \"3/5\");",
+              "err": {
+                "message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `[data-cy=\"rating-star-3\"]`, but never found it.",
+                "estack": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `[data-cy=\"rating-star-3\"]`, but never found it.\n    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress\\e2e\\component-showcase.cy.ts:65:10)",
+                "diff": null
+              },
+              "uuid": "20a0c5b6-2e8a-437a-be48-0974d150d938",
+              "parentUUID": "277a7c8e-274d-42aa-a165-2d907afedc4b",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "demonstrates component integration",
+              "fullTitle": "Component Showcase demonstrates component integration",
+              "timedOut": null,
+              "duration": 5084,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-cy=\"table-row\"]').first().click();\ncy.get('[data-cy=\"open-modal\"]').click();\ncy.get('[data-cy=\"modal-content\"]').should(\"be.visible\");\ncy.get('[data-cy=\"show-success\"]').click();\ncy.get('[data-cy=\"toast\"]').should(\"be.visible\");\ncy.get('[data-cy=\"modal-close\"]').click();\ncy.get('[data-cy=\"modal-backdrop\"]').should(\"not.exist\");",
+              "err": {
+                "message": "CypressError: Timed out retrying after 4050ms: `cy.click()` failed because the center of this element is hidden from view:\n\n`<button data-cy=\"show-success\">Show Su...</button>`\n\nFix this problem, or use `{force: true}` to disable error checking.\n\nhttps://on.cypress.io/element-cannot-be-interacted-with",
+                "estack": "CypressError: Timed out retrying after 4050ms: `cy.click()` failed because the center of this element is hidden from view:\n\n`<button data-cy=\"show-success\">Show Su...</button>`\n\nFix this problem, or use `{force: true}` to disable error checking.\n\nhttps://on.cypress.io/element-cannot-be-interacted-with\n    at ensureIsDescendent (http://localhost:3000/__cypress/runner/cypress_runner.js:114402:66)\n    at ensureDescendents (http://localhost:3000/__cypress/runner/cypress_runner.js:114438:5)\n    at possiblyScrollMultipleTimes (http://localhost:3000/__cypress/runner/cypress_runner.js:114545:22)\n    at scrollContainers (http://localhost:3000/__cypress/runner/cypress_runner.js:114567:16)\n    at ensureDescendentsAndScroll (http://localhost:3000/__cypress/runner/cypress_runner.js:114571:14)\n    at ensureElIsNotCovered (http://localhost:3000/__cypress/runner/cypress_runner.js:114575:5)\n    at runAllChecks (http://localhost:3000/__cypress/runner/cypress_runner.js:114774:52)\n    at retryActionability (http://localhost:3000/__cypress/runner/cypress_runner.js:114811:16)\n    at tryCatcher (http://localhost:3000/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:3000/__cypress/runner/cypress_runner.js:4285:29)\n    at whenStable (http://localhost:3000/__cypress/runner/cypress_runner.js:147205:68)\n    at <unknown> (http://localhost:3000/__cypress/runner/cypress_runner.js:147146:14)\n    at tryCatcher (http://localhost:3000/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise._settlePromiseFromHandler (http://localhost:3000/__cypress/runner/cypress_runner.js:1489:31)\n    at Promise._settlePromise (http://localhost:3000/__cypress/runner/cypress_runner.js:1546:18)\n    at Promise._settlePromise0 (http://localhost:3000/__cypress/runner/cypress_runner.js:1591:10)\n    at Promise._settlePromises (http://localhost:3000/__cypress/runner/cypress_runner.js:1671:18)\n    at Promise._fulfill (http://localhost:3000/__cypress/runner/cypress_runner.js:1615:18)\n    at <unknown> (http://localhost:3000/__cypress/runner/cypress_runner.js:5420:46)",
+                "diff": null
+              },
+              "uuid": "3bf47a93-361e-49be-a054-5eed4365ada2",
+              "parentUUID": "277a7c8e-274d-42aa-a165-2d907afedc4b",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "demonstrates accessibility features",
+              "fullTitle": "Component Showcase demonstrates accessibility features",
+              "timedOut": null,
+              "duration": 4742,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-cy=\"tab-tab1\"]').focus();\ncy.get('[data-cy=\"tab-tab1\"]').type(\"{rightarrow}\");\ncy.get('[data-cy=\"tab-tab2\"]').should(\"be.focused\");\ncy.get('[data-cy=\"tab-tab1\"]').should(\"have.attr\", \"aria-selected\", \"true\");\ncy.get('[data-cy=\"modal-backdrop\"]').should(\"have.attr\", \"aria-modal\", \"true\");\ncy.get('[data-cy=\"slider-track\"]').should(\"have.attr\", \"role\", \"slider\");\ncy.get('[data-cy=\"slider-track\"]').should(\"have.attr\", \"aria-valuemin\");",
+              "err": {
+                "message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `[data-cy=\"modal-backdrop\"]`, but never found it.",
+                "estack": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `[data-cy=\"modal-backdrop\"]`, but never found it.\n    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress\\e2e\\component-showcase.cy.ts:84:44)",
+                "diff": null
+              },
+              "uuid": "9e71af4d-0ec1-4722-a775-2d506943ea70",
+              "parentUUID": "277a7c8e-274d-42aa-a165-2d907afedc4b",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "demonstrates responsive behavior",
+              "fullTitle": "Component Showcase demonstrates responsive behavior",
+              "timedOut": null,
+              "duration": 279,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.viewport(375, 667);\ncy.get('[data-cy=\"data-table\"]').should(\"be.visible\");\ncy.get('[data-cy=\"tabs\"]').should(\"be.visible\");\ncy.viewport(768, 1024);\ncy.get('[data-cy=\"multi-step-form\"]').should(\"be.visible\");\ncy.viewport(1920, 1080);\ncy.get('[data-cy=\"file-upload\"]').should(\"be.visible\");",
+              "err": {},
+              "uuid": "372fc2cb-7c83-4d16-89a4-68d5b74145e4",
+              "parentUUID": "277a7c8e-274d-42aa-a165-2d907afedc4b",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "demonstrates error handling",
+              "fullTitle": "Component Showcase demonstrates error handling",
+              "timedOut": null,
+              "duration": 4471,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-cy=\"file-input\"]').selectFile(\"cypress/fixtures/large-file.json\");\ncy.get('[data-cy=\"toast\"]').should(\"contain\", \"too large\");\ncy.get('[data-cy=\"step1-next\"]').click();\ncy.get('[data-cy=\"step-error\"]').should(\"contain\", \"Please complete all required fields\");",
+              "err": {
+                "message": "CypressError: Timed out retrying after 4000ms: `cy.selectFile()` failed because this element is not visible:\n\n`<input accept=\"*\" data-cy=\"file-input\" type=\"file\" style=\"display: none;\">`\n\nThis element `<input>` is not visible because it has CSS property: `display: none`\n\nFix this problem, or use `{force: true}` to disable error checking.\n\nhttps://on.cypress.io/element-cannot-be-interacted-with",
+                "estack": "CypressError: Timed out retrying after 4000ms: `cy.selectFile()` failed because this element is not visible:\n\n`<input accept=\"*\" data-cy=\"file-input\" type=\"file\" style=\"display: none;\">`\n\nThis element `<input>` is not visible because it has CSS property: `display: none`\n\nFix this problem, or use `{force: true}` to disable error checking.\n\nhttps://on.cypress.io/element-cannot-be-interacted-with\n    at runVisibilityCheck (http://localhost:3000/__cypress/runner/cypress_runner.js:148378:58)\n    at Object.isStrictlyVisible (http://localhost:3000/__cypress/runner/cypress_runner.js:148392:10)\n    at runAllChecks (http://localhost:3000/__cypress/runner/cypress_runner.js:114743:26)\n    at retryActionability (http://localhost:3000/__cypress/runner/cypress_runner.js:114811:16)\n    at tryCatcher (http://localhost:3000/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise.attempt.Promise.try (http://localhost:3000/__cypress/runner/cypress_runner.js:4285:29)\n    at whenStable (http://localhost:3000/__cypress/runner/cypress_runner.js:147205:68)\n    at <unknown> (http://localhost:3000/__cypress/runner/cypress_runner.js:147146:14)\n    at tryCatcher (http://localhost:3000/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise._settlePromiseFromHandler (http://localhost:3000/__cypress/runner/cypress_runner.js:1489:31)\n    at Promise._settlePromise (http://localhost:3000/__cypress/runner/cypress_runner.js:1546:18)\n    at Promise._settlePromise0 (http://localhost:3000/__cypress/runner/cypress_runner.js:1591:10)\n    at Promise._settlePromises (http://localhost:3000/__cypress/runner/cypress_runner.js:1671:18)\n    at Promise._fulfill (http://localhost:3000/__cypress/runner/cypress_runner.js:1615:18)\n    at <unknown> (http://localhost:3000/__cypress/runner/cypress_runner.js:5420:46)",
+                "diff": null
+              },
+              "uuid": "8a481b1d-3f1f-48b9-88a4-c3065344308a",
+              "parentUUID": "277a7c8e-274d-42aa-a165-2d907afedc4b",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "demonstrates performance under load",
+              "fullTitle": "Component Showcase demonstrates performance under load",
+              "timedOut": null,
+              "duration": 4506,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-cy=\"data-table\"]').should(\"be.visible\");\ncy.get('[data-cy=\"table-row\"]').should(\"have.length.at.least\", 1);\nfor (let i = 0; i < 5; i++) {\n  cy.get('[data-cy=\"show-info\"]').click();\n}\ncy.get('[data-cy=\"toast\"]').should(\"have.length\", 5);",
+              "err": {
+                "message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `[data-cy=\"show-info\"]`, but never found it.",
+                "estack": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `[data-cy=\"show-info\"]`, but never found it.\n    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress\\e2e\\component-showcase.cy.ts:107:12)",
+                "diff": null
+              },
+              "uuid": "773fb8e8-408c-4acb-98f3-817ae997ccbc",
+              "parentUUID": "277a7c8e-274d-42aa-a165-2d907afedc4b",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "cfa645c2-3e27-48cc-b0ee-c6947dc1f31a",
+            "372fc2cb-7c83-4d16-89a4-68d5b74145e4"
+          ],
+          "failures": [
+            "4cb41c71-8f72-4919-b635-0598e8a2e30c",
+            "4430aedf-f1a9-4669-a887-fed798918e7c",
+            "a1073229-de9c-4dce-90e7-f1c4fbea0ead",
+            "2b3a3675-7b3c-407d-b618-81d76f86fc83",
+            "b86ee549-f3f3-4c67-b5ab-4076ee505414",
+            "ec575657-5617-4dfa-9093-ae19849cb92c",
+            "20a0c5b6-2e8a-437a-be48-0974d150d938",
+            "3bf47a93-361e-49be-a054-5eed4365ada2",
+            "9e71af4d-0ec1-4722-a775-2d506943ea70",
+            "8a481b1d-3f1f-48b9-88a4-c3065344308a",
+            "773fb8e8-408c-4acb-98f3-817ae997ccbc"
+          ],
+          "pending": [],
+          "skipped": [],
+          "duration": 49496,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

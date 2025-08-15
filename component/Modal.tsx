@@ -20,6 +20,7 @@ export default function Modal({
   closeOnEscape = true
 }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (!isOpen) return
@@ -43,6 +44,11 @@ export default function Modal({
     document.addEventListener('keydown', handleEscape)
     document.addEventListener('mousedown', handleClickOutside)
     document.body.style.overflow = 'hidden'
+
+    // Focus management
+    if (closeButtonRef.current) {
+      closeButtonRef.current.focus()
+    }
 
     return () => {
       document.removeEventListener('keydown', handleEscape)
@@ -100,59 +106,58 @@ export default function Modal({
         role="document"
       >
         {/* Header */}
-        {(title || closeOnBackdrop) && (
-          <div
-            data-cy="modal-header"
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '20px 20px 0 20px',
-              borderBottom: title ? '1px solid #e9ecef' : 'none'
-            }}
-          >
-            {title && (
-              <h2
-                id="modal-title"
-                data-cy="modal-title"
-                style={{
-                  margin: 0,
-                  fontSize: '1.5rem',
-                  fontWeight: '600'
-                }}
-              >
-                {title}
-              </h2>
-            )}
-            <button
-              data-cy="modal-close"
-              onClick={onClose}
+        <div
+          data-cy="modal-header"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '20px 20px 0 20px',
+            borderBottom: title ? '1px solid #e9ecef' : 'none'
+          }}
+        >
+          {title && (
+            <h2
+              id="modal-title"
+              data-cy="modal-title"
               style={{
-                background: 'none',
-                border: 'none',
-                fontSize: '24px',
-                cursor: 'pointer',
-                padding: '0',
-                width: '30px',
-                height: '30px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: '50%',
-                transition: 'background-color 0.2s'
+                margin: 0,
+                fontSize: '1.5rem',
+                fontWeight: '600'
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#f8f9fa'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent'
-              }}
-              aria-label="Close modal"
             >
-              ×
-            </button>
-          </div>
-        )}
+              {title}
+            </h2>
+          )}
+          <button
+            ref={closeButtonRef}
+            data-cy="modal-close"
+            onClick={onClose}
+            style={{
+              background: 'none',
+              border: 'none',
+              fontSize: '24px',
+              cursor: 'pointer',
+              padding: '0',
+              width: '30px',
+              height: '30px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '50%',
+              transition: 'background-color 0.2s'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#f8f9fa'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent'
+            }}
+            aria-label="Close modal"
+          >
+            ×
+          </button>
+        </div>
 
         {/* Body */}
         <div
