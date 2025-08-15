@@ -1,0 +1,90 @@
+{
+  "stats": {
+    "suites": 0,
+    "tests": 1,
+    "passes": 0,
+    "pending": 0,
+    "failures": 1,
+    "start": "2025-08-13T17:34:04.830Z",
+    "end": "2025-08-13T17:34:04.942Z",
+    "duration": 112,
+    "testsRegistered": 1,
+    "passPercent": 0,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "c15aa505-56dc-4aec-8dae-851d53a43cdc",
+      "title": "",
+      "fullFile": "cypress\\e2e\\features\\login.feature",
+      "file": "cypress\\e2e\\features\\login.feature",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [
+        {
+          "title": "An uncaught error was detected outside of a test",
+          "fullTitle": "An uncaught error was detected outside of a test",
+          "timedOut": null,
+          "duration": 101,
+          "state": "failed",
+          "speed": null,
+          "pass": false,
+          "fail": true,
+          "pending": false,
+          "context": null,
+          "code": "throw err;",
+          "err": {
+            "message": "Error: The following error originated from your test code, not from Cypress.\n\n  > Expected to find a global registry (this usually means you are trying to define steps or hooks in support/e2e.js, which is not supported) (this might be a bug, please report at https://github.com/badeball/cypress-cucumber-preprocessor)\n\nWhen Cypress detects uncaught errors originating from your test code it will automatically fail the current test.\n\nCypress could not associate this error to any specific test.\n\nWe dynamically generated a new test to display this failure.",
+            "estack": "Error: The following error originated from your test code, not from Cypress.\n\n  > Expected to find a global registry (this usually means you are trying to define steps or hooks in support/e2e.js, which is not supported) (this might be a bug, please report at https://github.com/badeball/cypress-cucumber-preprocessor)\n\nWhen Cypress detects uncaught errors originating from your test code it will automatically fail the current test.\n\nCypress could not associate this error to any specific test.\n\nWe dynamically generated a new test to display this failure.\n    at createError (http://localhost:56402/__cypress/tests?p=cypress\\support\\e2e.ts:362:16)\n    at fail (http://localhost:56402/__cypress/tests?p=cypress\\support\\e2e.ts:415:39)\n    at assert (http://localhost:56402/__cypress/tests?p=cypress\\support\\e2e.ts:421:9)\n    at assertAndReturn (http://localhost:56402/__cypress/tests?p=cypress\\support\\e2e.ts:424:9)\n    at getRegistry (http://localhost:56402/__cypress/tests?p=cypress\\support\\e2e.ts:12371:49)\n    at defineStep (http://localhost:56402/__cypress/tests?p=cypress\\support\\e2e.ts:13807:36)\n    at eval (http://localhost:56402/__cypress/tests?p=cypress\\support\\e2e.ts:13944:50)\n    at eval (http://localhost:56402/__cypress/tests?p=cypress\\support\\e2e.ts:14187:3)\n    at eval (<anonymous>)\n    at <unknown> (http://localhost:56402/__cypress/runner/cypress_runner.js:113275:23)",
+            "diff": null
+          },
+          "uuid": "ae8fdb92-7de7-4536-9002-94793e157a35",
+          "parentUUID": "c15aa505-56dc-4aec-8dae-851d53a43cdc",
+          "isHook": false,
+          "skipped": false
+        }
+      ],
+      "suites": [],
+      "passes": [],
+      "failures": [
+        "ae8fdb92-7de7-4536-9002-94793e157a35"
+      ],
+      "pending": [],
+      "skipped": [],
+      "duration": 101,
+      "root": true,
+      "rootEmpty": false,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

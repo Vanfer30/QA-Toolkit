@@ -1,15 +1,17 @@
 #!/bin/bash
 COVERAGE_FILE=$1
+
+if [[ -z "$COVERAGE_FILE" ]]; then
+  echo "❌ No coverage file specified."
+  exit 1
+fi
+
+# Run analyzer
 OUTPUT=$(./scripts/analyze-coverage.sh "$COVERAGE_FILE")
 
+# Save formatted markdown to file
 echo "::group::AI Coverage Summary"
 echo "$OUTPUT"
 echo "::endgroup::"
 
-echo "### 🤖 AI QA Coverage Summary" > .gpt-comment.md
-echo "$OUTPUT" >> .gpt-comment.md
-
-if [ -f .gpt-log-summary.txt ]; then
-  echo -e "\n---\n" >> .gpt-comment.md
-  cat .gpt-log-summary.txt >> .gpt-comment.md
-fi
+echo "$OUTPUT" > .gpt-comment.md  # ✅ GitHub PR comment body
